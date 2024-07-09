@@ -87,7 +87,7 @@ class meca500:
 
     def Connect(self):  # Connect to meca500 control port
         server_addr = (address.get(), int(port.get()))
-        terminal.set(f"Connecting to {server_addr[0]}:{server_addr[1]}")
+        terminal.set(f">Connecting to {server_addr[0]}:{server_addr[1]}<")
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setblocking(True)  # Sets socket to blocking mode
         self.sock.connect_ex(server_addr)
@@ -106,14 +106,14 @@ class meca500:
         try:
             self.sock.shutdown(socket.SHUT_RDWR)
         except OSError as e:
-            terminal.set(f"Socket shutdown error")
+            terminal.set(f">Socket shutdown error")
             print(e)
 
         try:
             self.sock.close()
-            terminal.set("Socket closed.")
+            terminal.set(">Socket closed<")
         except OSError as e:
-            terminal.set(f"Socket close error")
+            terminal.set(f">Socket close error<")
             print(e)
     
     def Send(self, command):
@@ -121,7 +121,7 @@ class meca500:
             self.sock.send(bytes(command + "\0", 'ascii'))  # Send cmd to meca
         except:
             connectTrig.set(0)  # If error, represent need for Connect()
-            terminal.set(f"Cannot send through socket")
+            terminal.set(f">Cannot send through socket<")
 
 
     def SetVel(self,*args):  # Limit joint velocity
@@ -152,10 +152,10 @@ class meca500:
         try:
             file = open(f"Trajectories/{ikFile.get()}", mode='r', encoding='utf-8-sig')
         except IsADirectoryError:
-            terminal.set("Select file")
+            terminal.set(">Select file<")
             return
         except:
-            terminal.set("File not found")
+            terminal.set(">File not found<")
             return
         
         lines = file.readlines()
@@ -180,6 +180,9 @@ class meca500:
         self.commands = commands + "\0"  # No more composite commands appended
 
     def BufferStep(self,*args):  # Send commands in chunks, start to finish, with a step size
+        if not self.commands:
+            terminal.set(">Parse The File<")
+            return
         size = int(bufferSize.get())
         cmd = self.commands
         self.buffer[1] += size  # Move end pointer for correct window size
@@ -205,10 +208,15 @@ class meca500:
         # Produce command
         cmd = self.commands[bufferStart:bufferEnd]
         self.Send(cmd)
+        terminal.set(">Moving Through Steps<")
 
     def BufferAll(self,*args): 
+        if not self.commands:
+            terminal.set(">Parse The File<")
+            return
         self.Send(self.commands)  # Send entire list of parsed commands
         self.crossover = 0  # Set cross over to erroneous checkpoint, such that Bufferstep() not triggered
+        terminal.set(">Moving Through All<")
     
     def Status(self): self.Send("GetStatusRobot")  # Request status
  
@@ -226,7 +234,7 @@ class meca500:
 
     def Abort(self,*args): self.Send("ClearMotion")  # Erase all commands from meca buffer
 
-    def SetError(self,param,err): terminal.set(f"Cannot Set {param}: {err}")
+    def SetError(self,param,err): terminal.set(f">Cannot Set {param}: {err}<")
 
     def AbortLocal(self,*args): # Erase all commands in class buffer 
         self.commands = ""
@@ -274,12 +282,12 @@ def Status():  # Handles status meca responses
 cothread.Spawn(Listener)  # Spin Listener in a thread
 cothread.Spawn(Status)  # Spin Status in a thread
  
+camonitor("mecaRobot:Connect",rb.isConnect)
 camonitor("mecaRobot:Parse.PROC",rb.Parse)
 camonitor("mecaRobot:IKfile",rb.AbortLocal)
 camonitor("mecaRobot:Vel",rb.SetVel)
 camonitor("mecaRobot:Acc",rb.SetAcc)
 camonitor("mecaRobot:Blend",rb.SetBlen)
-camonitor("mecaRobot:Connect",rb.isConnect)
 camonitor("mecaRobot:BufferAll.PROC",rb.BufferAll)
 camonitor("mecaRobot:Buffer.PROC",rb.BufferStep)
 camonitor("mecaRobot:Activate",rb.isActivate)
