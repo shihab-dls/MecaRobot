@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 928
-y 754
+x 1208
+y 283
 w 500
 h 530
 font "arial-medium-r-18.0"
@@ -607,7 +607,6 @@ bgColor index 10
 autoHeight
 limitsFromDb
 nullColor index 0
-fastUpdate
 useHexPrefix
 newPos
 objType "monitors"
@@ -733,7 +732,7 @@ x 418
 y 252
 w 37
 h 29
-controlPv "mecaRobot:HomeStatus"
+controlPv "mecaRobot:Error"
 lineColor index 14
 onColor index 22
 offColor index 24
@@ -798,7 +797,7 @@ major 4
 minor 1
 release 1
 x 362
-y 354
+y 353
 w 68
 h 42
 font "arial-medium-r-18.0"
@@ -821,7 +820,7 @@ minor 1
 release 0
 x 328
 y 442
-w 68
+w 46
 h 20
 fgColor index 14
 onColor index 58
@@ -842,9 +841,9 @@ beginObjectProperties
 major 4
 minor 1
 release 0
-x 395
+x 373
 y 442
-w 68
+w 46
 h 20
 fgColor index 14
 onColor index 68
@@ -865,9 +864,9 @@ beginObjectProperties
 major 4
 minor 1
 release 0
-x 328
-y 415
-w 138
+x 418
+y 442
+w 46
 h 20
 fgColor index 14
 onColor index 57
@@ -1088,5 +1087,50 @@ nullColor index 0
 useHexPrefix
 newPos
 objType "controls"
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 326
+y 413
+w 142
+h 24
+controlPv "mecaRobot:Pause"
+lineColor index 14
+onColor index 16
+offColor index 19
+numBits 1
+endObjectProperties
+
+# (Button)
+object activeButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 328
+y 415
+w 138
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+inconsistentColor index 14
+topShadowColor index 56
+botShadowColor index 14
+controlPv "mecaRobot:Pause"
+indicatorPv "mecaRobot:Pause"
+onLabel "Resume"
+offLabel "Pause"
+labelType "literal"
+3d
+font "arial-medium-r-14.0"
+objType "controls"
+controlBitPos 0
+readBitPos 0
 endObjectProperties
 

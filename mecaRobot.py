@@ -33,13 +33,14 @@ activate = builder.aOut('Activate', initial_value=0)
 home = builder.aOut('Home', initial_value=0)
 abort = builder.aOut('Abort', initial_value=0)
 reset = builder.aOut('Reset', initial_value=0)
+pause = builder.aOut('Pause', initial_value=0)
 
 vel = builder.aOut("Vel", EGU="%", initial_value=5)
 acc = builder.aOut("Acc", EGU="%", initial_value=100)
 blend = builder.aOut("Blend", EGU="%", initial_value=100)
 
 parse = builder.aOut('Parse', initial_value=0)
-bufferSize = builder.aOut("BufferSize", initial_value=1)
+bufferSize = builder.aOut("BufferSize", initial_value=2)
 bufferGroup = builder.aOut("BufferGroup", initial_value=1)
 buffer = builder.aOut("Buffer")
 bufferAll = builder.aOut("BufferAll")
@@ -58,6 +59,7 @@ class meca500:
         self.activation_status = 0
         self.homing_status = 0
         self.error_status = 0
+        self.pause_status = 1
         self.vel = vel.get()
         self.acc = acc.get()
         self.blend = blend.get()
@@ -73,14 +75,21 @@ class meca500:
             self.Activate()
         else:
             self.Deactivate()
+    
+    def isPause(self,*args):
+        if pause.get():
+            self.Pause()
+        else:
+            self.Resume()
 
     def Connect(self):  # Connect to meca500 control port
         server_addr = (address.get(), int(port.get()))
         terminal.set(f"Connecting to {server_addr[0]}:{server_addr[1]}")
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.setblocking(False)  # Sets socket to non-blocking mode
+        self.sock.setblocking(True)  # Sets socket to blocking mode
         self.sock.connect_ex(server_addr)
-        self.Status() # Fetch initial status of meca#
+        self.sock.setblocking(False)  # Sets socket to blocking mode
+        self.Status(); self.SetAcc(); self.SetVel(); self.SetBlen()
 
     def Disconnect(self):  # Close Socket
         try:
@@ -103,6 +112,7 @@ class meca500:
             connectTrig.set(0)  # If error, represent need for Connect()
             terminal.set(f"Cannot send through socket")
 
+
     def SetVel(self,*args):  # Limit joint velocity
         if connectTrig.get():
             self.Send(f"SetJointVel({vel.get()})")
@@ -119,7 +129,7 @@ class meca500:
             acc.set(self.acc)
             self.SetError("Acceleration","Disconnected")
 
-    def SetBlen(self,*args):  # Limit trajectory blending
+    def SetBlen(self,*args):  # Set blending amount
         if connectTrig.get():
             self.Send(f"SetBlending({blend.get()})")
             self.blend = blend.get()
@@ -162,7 +172,6 @@ class meca500:
         size = int(bufferSize.get())
         cmd = self.commands
         self.buffer[1] += size  # Move end pointer for correct window size
-        self.crossover = self.buffer[1]
 
         # Search for checkpoints at start and end pointers
         bufferStart = re.search(f"SetCheckpoint\({self.buffer[0]}\)",cmd)
@@ -174,7 +183,7 @@ class meca500:
 
         # Restart pointers if all commands buffered
         if bufferEnd != len(self.commands[:-2]):
-            self.crossover = self.buffer[1]
+            self.crossover = self.buffer[1] - 1
             self.buffer[0] = self.buffer[1]
             bufferGroup.set(bufferGroup.get()+1)
         else:
@@ -183,8 +192,8 @@ class meca500:
             bufferGroup.set(1)
 
         # Produce command
-        cmd = f"{self.commands[bufferStart:bufferEnd]}\0"
-        print(cmd)
+        cmd = self.commands[bufferStart:bufferEnd]
+        self.Send(cmd)
 
     def BufferAll(self,*args): 
         self.Send(self.commands)  # Send entire list of parsed commands
@@ -200,6 +209,10 @@ class meca500:
  
     def Reset(self,*args): self.Send("ResetError")  # If in error, reset state
     
+    def Resume(self,*args): self.Send("ResumeMotion")  # Resume motion
+    
+    def Pause(self,*args): self.Send("PauseMotion")  # Pause motion
+
     def Abort(self,*args): self.Send("ClearMotion")  # Erase all commands from meca buffer
 
     def SetError(self,param,err): terminal.set(f"Cannot Set {param}: {err}")
@@ -225,10 +238,14 @@ def Listener():  # Handles all meca responses
                 status = matchStatus.group(1).split(",")
                 rb.activation_status = int(status[0])
                 rb.homing_status = int(status[1])
-                rb.homing_status = int(status[3])
+                rb.error = int(status[3])
+                rb.pause_status = int(status[4])
                 activateStatus.set(rb.activation_status)
+                activate.set(rb.activation_status)
                 homeStatus.set(rb.homing_status)
                 errorStatus.set(rb.error_status)
+                pause.set(rb.pause_status)
+
             else:  # Any other response, print to terminal
                 terminal.set(response)
         except:
@@ -250,5 +267,6 @@ camonitor("mecaRobot:Activate",rb.isActivate)
 camonitor("mecaRobot:Abort.PROC",rb.Abort)
 camonitor("mecaRobot:Reset.PROC",rb.Reset)
 camonitor("mecaRobot:Home.PROC",rb.Home)
+camonitor("mecaRobot:Pause",rb.isPause)
 
 softioc.interactive_ioc(globals())
