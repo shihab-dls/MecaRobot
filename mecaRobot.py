@@ -93,7 +93,7 @@ class meca500:
         self.sock.setblocking(True)  # Sets socket to blocking mode
         self.sock.connect_ex(server_addr)
         self.sock.setblocking(False)  # Sets socket to blocking mode
-        self.Status(); self.SetAcc(); self.SetVel(); self.SetBlen()
+        self.SetAcc(); self.SetVel(); self.SetBlen()
 
 
     def ConnectStatus(self):  # Connect to meca500 monitoring port
@@ -220,9 +220,7 @@ class meca500:
         self.Send(self.commands)  # Send entire list of parsed commands
         self.crossover = 0  # Set cross over to erroneous checkpoint, such that Bufferstep() not triggered
         terminal.set(">Moving Through All<")
-    
-    def Status(self): self.Send("GetStatusRobot")  # Request status
- 
+     
     def Activate(self): self.Send("ActivateRobot")  # Activate meca
  
     def Home(self,*args): self.Send("Home")  # Calibrate meca; must be done upon activation
