@@ -1,0 +1,1092 @@
+4 0 1
+beginScreenProperties
+major 4
+minor 0
+release 1
+x 928
+y 754
+w 500
+h 530
+font "arial-medium-r-18.0"
+ctlFont "arial-medium-r-18.0"
+btnFont "arial-medium-r-18.0"
+fgColor index 13
+bgColor index 56
+textColor index 14
+ctlFgColor1 index 14
+ctlFgColor2 index 0
+ctlBgColor1 index 0
+ctlBgColor2 index 14
+topShadowColor index 0
+botShadowColor index 14
+endScreenProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 0
+y 50
+w 500
+h 600
+lineColor index 14
+fill
+fillColor index 5
+lineWidth 0
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 132
+w 280
+h 206
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 0
+y 0
+w 499
+h 40
+lineColor index 14
+fill
+fillColor index 9
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 173
+y 9
+w 163
+h 23
+font "arial-medium-r-20.0"
+fgColor index 78
+bgColor index 0
+useDisplayBg
+value {
+  "Meca500 Flyscan"
+}
+autoSize
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 60
+w 460
+h 62
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 30
+y 70
+w 166
+h 16
+font "arial-medium-r-14.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Joint Trajectory File Name"
+}
+autoSize
+lineWidth 5
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 68
+y 95
+w 177
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+topShadowColor index 50
+botShadowColor index 14
+controlPv "mecaRobot:Parse.PROC"
+pressValue "1"
+onLabel "Parse"
+offLabel "Parse"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 252
+y 96
+w 157
+h 18
+controlPv "mecaRobot:ParseStatus"
+lineColor index 13
+onColor index 16
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 314
+y 132
+w 165
+h 206
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 418
+y 177
+w 37
+h 29
+controlPv "mecaRobot:ActivateStatus"
+lineColor index 14
+onColor index 16
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 418
+y 213
+w 37
+h 29
+controlPv "mecaRobot:HomeStatus"
+lineColor index 14
+onColor index 16
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 328
+y 182
+w 70
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Activated"
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 340
+y 219
+w 56
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Homed"
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 26
+y 304
+w 84
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Checkpoint"
+}
+autoSize
+endObjectProperties
+
+# (Text Monitor)
+object activeXTextDspClass:noedit
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 120
+y 305
+w 165
+h 16
+controlPv "mecaRobot:Checkpoint"
+font "arial-medium-r-14.0"
+fontAlign "center"
+fgColor index 2
+bgColor index 12
+autoHeight
+limitsFromDb
+nullColor index 0
+fastUpdate
+useHexPrefix
+newPos
+objType "monitors"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 207
+y 68
+w 254
+h 21
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 210
+y 70
+w 250
+h 18
+controlPv "mecaRobot:IKfile"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 57
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 132
+w 280
+h 28
+lineColor index 14
+fill
+fillColor index 7
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 82
+y 137
+w 102
+h 42
+font "arial-medium-r-18.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "           Track"
+  "   "
+}
+autoSize
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 314
+y 132
+w 165
+h 28
+lineColor index 14
+fill
+fillColor index 7
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 314
+y 136
+w 107
+h 42
+font "arial-medium-r-18.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "           Status"
+  "   "
+}
+autoSize
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 350
+w 281
+h 120
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 340
+y 297
+w 111
+h 31
+controlPv "mecaRobot:Connect"
+lineColor index 14
+onColor index 16
+offColor index 19
+numBits 1
+endObjectProperties
+
+# (Button)
+object activeButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 343
+y 299
+w 106
+h 27
+fgColor index 14
+onColor index 57
+offColor index 56
+inconsistentColor index 14
+topShadowColor index 56
+botShadowColor index 14
+controlPv "mecaRobot:Connect"
+indicatorPv "mecaRobot:Connect"
+onLabel "Disconnect"
+offLabel "Connect"
+labelType "literal"
+3d
+font "arial-medium-r-18.0"
+objType "controls"
+controlBitPos 0
+readBitPos 0
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 31
+y 388
+w 111
+h 16
+font "arial-medium-r-14.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Velocity Limit (%)"
+}
+autoSize
+lineWidth 5
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 350
+w 281
+h 28
+lineColor index 14
+fill
+fillColor index 7
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 116
+y 355
+w 98
+h 42
+font "arial-medium-r-18.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Parameters"
+  "   "
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 32
+y 418
+w 99
+h 16
+font "arial-medium-r-14.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Accel. Limit (%)"
+}
+autoSize
+lineWidth 5
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 31
+y 446
+w 83
+h 16
+font "arial-medium-r-14.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Blending (%)"
+}
+autoSize
+lineWidth 5
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 481
+w 460
+h 28
+lineColor index 14
+fill
+fillColor index 7
+endObjectProperties
+
+# (Text Monitor)
+object activeXTextDspClass:noedit
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 25
+y 487
+w 450
+h 18
+controlPv "mecaRobot:Terminal"
+format "string"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 24
+bgColor index 10
+autoHeight
+limitsFromDb
+nullColor index 0
+fastUpdate
+useHexPrefix
+newPos
+objType "monitors"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 26
+y 171
+w 83
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Buffer Step"
+}
+autoSize
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 30
+y 237
+w 255
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+topShadowColor index 50
+botShadowColor index 14
+controlPv "mecaRobot:Buffer.PROC"
+pressValue "1"
+onLabel "Buffer"
+offLabel "Buffer"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Text Monitor)
+object activeXTextDspClass:noedit
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 141
+y 203
+w 143
+h 16
+controlPv "mecaRobot:BufferGroup"
+font "arial-medium-r-14.0"
+fontAlign "center"
+fgColor index 2
+bgColor index 12
+autoHeight
+limitsFromDb
+nullColor index 0
+fastUpdate
+useHexPrefix
+newPos
+objType "monitors"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 28
+y 201
+w 100
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Next Block In"
+}
+autoSize
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 30
+y 263
+w 255
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+topShadowColor index 50
+botShadowColor index 14
+controlPv "mecaRobot:BufferAll.PROC"
+pressValue "1"
+onLabel "Buffer All"
+offLabel "Buffer All"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 418
+y 252
+w 37
+h 29
+controlPv "mecaRobot:HomeStatus"
+lineColor index 14
+onColor index 22
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 340
+y 258
+w 58
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "In Error"
+}
+autoSize
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 314
+y 350
+w 165
+h 120
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 314
+y 350
+w 165
+h 28
+lineColor index 14
+fill
+fillColor index 7
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 362
+y 354
+w 68
+h 42
+font "arial-medium-r-18.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "General"
+  "   "
+}
+autoSize
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 328
+y 442
+w 68
+h 20
+fgColor index 14
+onColor index 58
+offColor index 59
+topShadowColor index 58
+botShadowColor index 14
+controlPv "mecaRobot:Reset.PROC"
+pressValue "1"
+onLabel "Reset"
+offLabel "Reset"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 395
+y 442
+w 68
+h 20
+fgColor index 14
+onColor index 68
+offColor index 69
+topShadowColor index 68
+botShadowColor index 14
+controlPv "mecaRobot:Abort.PROC"
+pressValue "1"
+onLabel "Abort"
+offLabel "Abort"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 328
+y 415
+w 138
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+topShadowColor index 50
+botShadowColor index 14
+controlPv "mecaRobot:Home.PROC"
+pressValue "1"
+onLabel "Home"
+offLabel "Home"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 326
+y 384
+w 142
+h 24
+controlPv "mecaRobot:Activate"
+lineColor index 14
+onColor index 16
+offColor index 19
+numBits 1
+endObjectProperties
+
+# (Button)
+object activeButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 328
+y 386
+w 138
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+inconsistentColor index 14
+topShadowColor index 56
+botShadowColor index 14
+controlPv "mecaRobot:Activate"
+indicatorPv "mecaRobot:Activate"
+onLabel "Deactivate"
+offLabel "Activate"
+labelType "literal"
+3d
+font "arial-medium-r-14.0"
+objType "controls"
+controlBitPos 0
+readBitPos 0
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 114
+y 169
+w 170
+h 21
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 116
+y 171
+w 167
+h 18
+controlPv "mecaRobot:BufferSize"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 57
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 158
+y 384
+w 130
+h 19
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 161
+y 386
+w 124
+h 16
+controlPv "mecaRobot:Vel"
+format "string"
+font "arial-medium-r-14.0"
+fontAlign "center"
+fgColor index 3
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 159
+y 414
+w 130
+h 19
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 162
+y 416
+w 124
+h 16
+controlPv "mecaRobot:Acc"
+format "string"
+font "arial-medium-r-14.0"
+fontAlign "center"
+fgColor index 3
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 158
+y 442
+w 130
+h 19
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 161
+y 444
+w 124
+h 16
+controlPv "mecaRobot:Blend"
+format "string"
+font "arial-medium-r-14.0"
+fontAlign "center"
+fgColor index 3
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
