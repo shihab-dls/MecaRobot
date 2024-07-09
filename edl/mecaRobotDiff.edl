@@ -4,7 +4,7 @@ major 4
 minor 0
 release 1
 x 1293
-y 207
+y 244
 w 500
 h 530
 font "arial-medium-r-18.0"
@@ -138,7 +138,7 @@ onColor index 57
 offColor index 56
 topShadowColor index 50
 botShadowColor index 14
-controlPv "mecaRobot:Parse.PROC"
+controlPv "$(P)$(R):Parse.PROC"
 pressValue "1"
 onLabel "Parse"
 offLabel "Parse"
@@ -156,7 +156,7 @@ x 252
 y 96
 w 157
 h 18
-controlPv "mecaRobot:ParseStatus"
+controlPv "$(P)$(R):ParseStatus"
 lineColor index 13
 onColor index 16
 offColor index 19
@@ -189,7 +189,7 @@ x 418
 y 177
 w 37
 h 29
-controlPv "mecaRobot:ActivateStatus"
+controlPv "$(P)$(R):ActivateStatus"
 lineColor index 14
 onColor index 16
 offColor index 19
@@ -207,7 +207,7 @@ x 418
 y 213
 w 37
 h 29
-controlPv "mecaRobot:HomeStatus"
+controlPv "$(P)$(R):HomeStatus"
 lineColor index 14
 onColor index 16
 offColor index 19
@@ -285,7 +285,7 @@ x 120
 y 305
 w 165
 h 16
-controlPv "mecaRobot:Checkpoint"
+controlPv "$(P)$(R):Checkpoint"
 font "arial-medium-r-14.0"
 fontAlign "center"
 fgColor index 2
@@ -325,7 +325,7 @@ x 210
 y 70
 w 250
 h 18
-controlPv "mecaRobot:IKfile"
+controlPv "$(P)$(R):IKfile"
 font "arial-medium-r-16.0"
 fontAlign "center"
 fgColor index 57
@@ -438,7 +438,7 @@ x 340
 y 297
 w 111
 h 31
-controlPv "mecaRobot:Connect"
+controlPv "$(P)$(R):Connect"
 lineColor index 14
 onColor index 16
 offColor index 19
@@ -461,8 +461,8 @@ offColor index 56
 inconsistentColor index 14
 topShadowColor index 56
 botShadowColor index 14
-controlPv "mecaRobot:Connect"
-indicatorPv "mecaRobot:Connect"
+controlPv "$(P)$(R):Connect"
+indicatorPv "$(P)$(R):Connect"
 onLabel "Disconnect"
 offLabel "Connect"
 labelType "literal"
@@ -598,7 +598,7 @@ x 25
 y 487
 w 450
 h 18
-controlPv "mecaRobot:Terminal"
+controlPv "$(P)$(R):Terminal"
 format "string"
 font "arial-medium-r-16.0"
 fontAlign "center"
@@ -647,7 +647,7 @@ onColor index 57
 offColor index 56
 topShadowColor index 50
 botShadowColor index 14
-controlPv "mecaRobot:Buffer.PROC"
+controlPv "$(P)$(R):Buffer.PROC"
 pressValue "1"
 onLabel "Buffer"
 offLabel "Buffer"
@@ -665,7 +665,7 @@ x 141
 y 222
 w 143
 h 16
-controlPv "mecaRobot:BufferGroup"
+controlPv "$(P)$(R):BufferGroup"
 font "arial-medium-r-14.0"
 fontAlign "center"
 fgColor index 2
@@ -714,7 +714,7 @@ onColor index 57
 offColor index 56
 topShadowColor index 50
 botShadowColor index 14
-controlPv "mecaRobot:BufferAll.PROC"
+controlPv "$(P)$(R):BufferAll.PROC"
 pressValue "1"
 onLabel "Buffer All"
 offLabel "Buffer All"
@@ -732,7 +732,7 @@ x 418
 y 252
 w 37
 h 29
-controlPv "mecaRobot:Error"
+controlPv "$(P)$(R):Error"
 lineColor index 14
 onColor index 22
 offColor index 24
@@ -827,7 +827,7 @@ onColor index 58
 offColor index 59
 topShadowColor index 58
 botShadowColor index 14
-controlPv "mecaRobot:Reset.PROC"
+controlPv "$(P)$(R):Reset.PROC"
 pressValue "1"
 onLabel "Reset"
 offLabel "Reset"
@@ -850,7 +850,7 @@ onColor index 68
 offColor index 69
 topShadowColor index 68
 botShadowColor index 14
-controlPv "mecaRobot:Abort.PROC"
+controlPv "$(P)$(R):Abort.PROC"
 pressValue "1"
 onLabel "Abort"
 offLabel "Abort"
@@ -873,7 +873,7 @@ onColor index 57
 offColor index 56
 topShadowColor index 50
 botShadowColor index 14
-controlPv "mecaRobot:Home.PROC"
+controlPv "$(P)$(R):Home.PROC"
 pressValue "1"
 onLabel "Home"
 offLabel "Home"
@@ -891,7 +891,7 @@ x 326
 y 384
 w 142
 h 24
-controlPv "mecaRobot:Activate"
+controlPv "$(P)$(R):Activate"
 lineColor index 14
 onColor index 16
 offColor index 19
@@ -914,8 +914,8 @@ offColor index 56
 inconsistentColor index 14
 topShadowColor index 56
 botShadowColor index 14
-controlPv "mecaRobot:Activate"
-indicatorPv "mecaRobot:Activate"
+controlPv "$(P)$(R):Activate"
+indicatorPv "$(P)$(R):Activate"
 onLabel "Deactivate"
 offLabel "Activate"
 labelType "literal"
@@ -952,7 +952,7 @@ x 116
 y 171
 w 167
 h 18
-controlPv "mecaRobot:BufferSize"
+controlPv "$(P)$(R):BufferSize"
 font "arial-medium-r-16.0"
 fontAlign "center"
 fgColor index 57
@@ -992,7 +992,7 @@ x 161
 y 386
 w 124
 h 16
-controlPv "mecaRobot:Vel"
+controlPv "$(P)$(R):Vel"
 format "string"
 font "arial-medium-r-14.0"
 fontAlign "center"
@@ -1033,7 +1033,7 @@ x 162
 y 416
 w 124
 h 16
-controlPv "mecaRobot:Acc"
+controlPv "$(P)$(R):Acc"
 format "string"
 font "arial-medium-r-14.0"
 fontAlign "center"
@@ -1074,7 +1074,7 @@ x 161
 y 444
 w 124
 h 16
-controlPv "mecaRobot:Blend"
+controlPv "$(P)$(R):Blend"
 format "string"
 font "arial-medium-r-14.0"
 fontAlign "center"
@@ -1099,7 +1099,7 @@ x 326
 y 413
 w 142
 h 24
-controlPv "mecaRobot:Pause"
+controlPv "$(P)$(R):Pause"
 lineColor index 14
 onColor index 16
 offColor index 19
@@ -1122,8 +1122,8 @@ offColor index 56
 inconsistentColor index 14
 topShadowColor index 56
 botShadowColor index 14
-controlPv "mecaRobot:Pause"
-indicatorPv "mecaRobot:Pause"
+controlPv "$(P)$(R):Pause"
+indicatorPv "$(P)$(R):Pause"
 onLabel "Resume"
 offLabel "Pause"
 labelType "literal"
@@ -1180,7 +1180,7 @@ x 194
 y 196
 w 89
 h 18
-controlPv "mecaRobot:BufferCross"
+controlPv "$(P)$(R):BufferCross"
 font "arial-medium-r-16.0"
 fontAlign "center"
 fgColor index 57
