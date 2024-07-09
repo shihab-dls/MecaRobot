@@ -14,6 +14,7 @@ builder.SetDeviceName("mecaRobot")
 ## Initialisation
 address = builder.stringOut('Address', initial_value="172.23.17.169")
 port = builder.aOut('Port', initial_value=10000)
+monport = builder.aOut('MonPort', initial_value=10001)
 ikFile = builder.stringOut('IKfile')
 
 ## Status
@@ -56,6 +57,7 @@ class meca500:
         self.buffer = [0,0]
         self.crossover = 0
         self.sock = None
+        self.sockMon = None
         self.activation_status = 0
         self.homing_status = 0
         self.error_status = 0
@@ -67,6 +69,7 @@ class meca500:
     def isConnect(self,*args):
         if connectTrig.get():
             self.Connect()
+            self.ConnectStatus()
         else:
             self.Disconnect()
     
@@ -90,6 +93,14 @@ class meca500:
         self.sock.connect_ex(server_addr)
         self.sock.setblocking(False)  # Sets socket to blocking mode
         self.Status(); self.SetAcc(); self.SetVel(); self.SetBlen()
+
+
+    def ConnectStatus(self):  # Connect to meca500 monitoring port
+        server_addr = (address.get(), int(monport.get()))
+        self.sockMon = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sockMon.setblocking(True)  # Sets socket to blocking mode
+        self.sockMon.connect_ex(server_addr)
+        self.sockMon.setblocking(False)  # Sets socket to blocking mode
 
     def Disconnect(self):  # Close Socket
         try:
@@ -223,37 +234,45 @@ class meca500:
 
 rb = meca500()  # Instantiate object of meca
 rb.Connect()
+rb.ConnectStatus()
 
-def Listener():  # Handles all meca responses
+def Listener():  # Handles checkpoint meca responses
     while True:
         try:
             response = rb.sock.recv(1024).decode('ascii')
             matchCheck = re.search(r'\[3030\]\[(\d+)\]', response)  # Checkpoint RBVs?
-            matchStatus = re.search(r'\[2007\]\[(\d+(?:,\d+)*)\]', response)  # Status RBVs?
             if matchCheck:  # If truthy, update PV
                 checkPoint.set(int(matchCheck.group(1)))
                 if int(matchCheck.group(1)) == rb.crossover: ## If point == end of buffer step, send next block in
                     rb.BufferStep()
-            elif matchStatus:  # If truthy, update class attributes
+            else:  # Any other response, print to terminal
+                terminal.set(response)
+        except:
+            pass
+        cothread.Sleep(0.0001)  # Short sleep to prevent ring buffer error
+
+def Status():  # Handles status meca responses
+    while True:
+        try:
+            response = rb.sockMon.recv(1024).decode('ascii')
+            matchStatus = re.search(r'\[2007\]\[(\d+(?:,\d+)*)\]', response)  # Status RBVs?
+            if matchStatus:  # If truthy, update class attributes
                 status = matchStatus.group(1).split(",")
                 rb.activation_status = int(status[0])
                 rb.homing_status = int(status[1])
-                rb.error = int(status[3])
+                rb.error_status = int(status[3])
                 rb.pause_status = int(status[4])
                 activateStatus.set(rb.activation_status)
                 activate.set(rb.activation_status)
                 homeStatus.set(rb.homing_status)
                 errorStatus.set(rb.error_status)
                 pause.set(rb.pause_status)
-
-            else:  # Any other response, print to terminal
-                terminal.set(response)
         except:
             pass
         cothread.Sleep(0.0001)  # Short sleep to prevent ring buffer error
- 
- 
+
 cothread.Spawn(Listener)  # Spin Listener in a thread
+cothread.Spawn(Status)  # Spin Status in a thread
  
 camonitor("mecaRobot:Parse.PROC",rb.Parse)
 camonitor("mecaRobot:IKfile",rb.AbortLocal)
