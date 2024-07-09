@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 963
-y 343
+x 1293
+y 207
 w 500
 h 530
 font "arial-medium-r-18.0"
@@ -639,7 +639,7 @@ major 4
 minor 1
 release 0
 x 30
-y 237
+y 250
 w 255
 h 20
 fgColor index 14
@@ -662,7 +662,7 @@ major 4
 minor 6
 release 0
 x 141
-y 203
+y 222
 w 143
 h 16
 controlPv "mecaRobot:BufferGroup"
@@ -686,7 +686,7 @@ major 4
 minor 1
 release 1
 x 28
-y 201
+y 220
 w 100
 h 18
 font "arial-medium-r-16.0"
@@ -706,7 +706,7 @@ major 4
 minor 1
 release 0
 x 30
-y 263
+y 276
 w 255
 h 20
 fgColor index 14
@@ -1132,5 +1132,65 @@ font "arial-medium-r-14.0"
 objType "controls"
 controlBitPos 0
 readBitPos 0
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 27
+y 196
+w 160
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Crossover From End"
+}
+autoSize
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 192
+y 194
+w 92
+h 21
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 194
+y 196
+w 89
+h 18
+controlPv "mecaRobot:BufferCross"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 57
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
 endObjectProperties
 
