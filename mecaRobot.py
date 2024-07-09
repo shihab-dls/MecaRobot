@@ -42,6 +42,7 @@ blend = builder.aOut("Blend", EGU="%", initial_value=100)
 
 parse = builder.aOut('Parse', initial_value=0)
 bufferSize = builder.aOut("BufferSize", initial_value=2)
+crossover = builder.aOut("BufferCross", initial_value=1)
 bufferGroup = builder.aOut("BufferGroup", initial_value=1)
 buffer = builder.aOut("Buffer")
 bufferAll = builder.aOut("BufferAll")
@@ -105,12 +106,14 @@ class meca500:
     def Disconnect(self):  # Close Socket
         try:
             self.sock.shutdown(socket.SHUT_RDWR)
+            self.sockMon.shutdown(socket.SHUT_RDWR)
         except OSError as e:
             terminal.set(f">Socket shutdown error")
             print(e)
 
         try:
             self.sock.close()
+            self.sockMon.close()
             terminal.set(">Socket closed<")
         except OSError as e:
             terminal.set(f">Socket close error<")
@@ -197,7 +200,7 @@ class meca500:
 
         # Restart pointers if all commands buffered
         if bufferEnd != len(self.commands[:-2]):
-            self.crossover = self.buffer[1] - 1
+            self.crossover = self.buffer[1] - crossover.get()
             self.buffer[0] = self.buffer[1]
             bufferGroup.set(bufferGroup.get()+1)
         else:
