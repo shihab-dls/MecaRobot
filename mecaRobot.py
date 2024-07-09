@@ -235,9 +235,13 @@ class meca500:
     
     def Pause(self,*args): self.Send("PauseMotion")  # Pause motion
 
-    def Abort(self,*args): self.Send("ClearMotion")  # Erase all commands from meca buffer
-
     def SetError(self,param,err): terminal.set(f">Cannot Set {param}: {err}<")
+    
+    def Abort(self,*args): 
+        self.Send("ClearMotion")  # Erase all commands from meca buffer
+        # Resets buffer pointers for BufferStep() method
+        self.buffer = [0,0]
+        bufferGroup.set(1)
 
     def AbortLocal(self,*args): # Erase all commands in class buffer 
         self.commands = ""
