@@ -180,7 +180,7 @@ class meca500:
             commands = commands + f"SetCheckpoint({point})\n"
             parseStatus.set(1)
 
-        self.commands = commands + "\0"  # No more composite commands appended
+        self.commands = commands  # No more composite commands appended
 
     def BufferStep(self,*args):  # Send commands in chunks, start to finish, with a step size
         if not self.commands:
@@ -225,7 +225,7 @@ class meca500:
  
     def Home(self,*args): self.Send("Home")  # Calibrate meca; must be done upon activation
  
-    def Deactivate(self): self.Send("DeactivateRobot")  # Deactivate meca; homing status goes low
+    def Deactivate(self): self.Send("DeactivateRobot")  # Deactivate meca
  
     def Reset(self,*args): self.Send("ResetError")  # If in error, reset state
     
@@ -239,7 +239,7 @@ class meca500:
         self.Send("ClearMotion")  # Erase all commands from meca buffer
         # Resets buffer pointers for BufferStep() method
         self.buffer = [0,0]
-        bufferGroup.set(1)
+        bufferGroup.set(1);pause.set(1)
 
     def AbortLocal(self,*args): # Erase all commands in class buffer 
         self.commands = ""
