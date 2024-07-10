@@ -46,6 +46,7 @@ crossover = builder.aOut("BufferCross", initial_value=1)
 bufferGroup = builder.aOut("BufferGroup", initial_value=1)
 buffer = builder.aOut("Buffer")
 bufferAll = builder.aOut("BufferAll")
+getjoints = builder.aOut("GetJoints", initial_value=0)
 
 # Boilerplate to get the IOC started
 builder.LoadDatabase()
@@ -235,6 +236,8 @@ class meca500:
 
     def SetError(self,param,err): terminal.set(f">Cannot Set {param}: {err}<")
     
+    def GetJoints(self): self.Send("GetRtJointPos")
+
     def Abort(self,*args): 
         self.Send("ClearMotion")  # Erase all commands from meca buffer
         # Resets buffer pointers for BufferStep() method
@@ -256,10 +259,13 @@ def Listener():  # Handles checkpoint meca responses
             matchCheck = re.search(r'\[3030\]\[(\d+)\]', response)  # Checkpoint RBVs?
             if matchCheck:  # If truthy, update PV
                 checkPoint.set(int(matchCheck.group(1)))
-                if int(matchCheck.group(1)) == rb.crossover: ## If point == end of buffer step, send next block in
-                    rb.BufferStep()
+                if int(matchCheck.group(1)) == rb.crossover:
+                    rb.BufferStep()  ## If point == end of buffer step, send next block in
+                if getjoints.get():
+                    rb.GetJoints()  ## Checkpoints trigger joint pos request if PV truthy
             else:  # Any other response, print to terminal
                 terminal.set(response)
+                print(response)
         except:
             pass
         cothread.Sleep(0.0001)  # Short sleep to prevent ring buffer error
