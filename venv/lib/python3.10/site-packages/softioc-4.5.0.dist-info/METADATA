@@ -1,0 +1,111 @@
+Metadata-Version: 2.1
+Name: softioc
+Version: 4.5.0
+Summary: Embed an EPICS IOC in a Python process
+Home-page: https://github.com/dls-controls/pythonSoftIOC
+Author: Michael Abbott
+Author-email: Michael.Abbott@diamond.ac.uk
+License: Apache License 2.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.6
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: epicscorelibs <7.0.7.99.1,>=7.0.7.99.0.2
+Requires-Dist: pvxslibs >=1.2.2
+Requires-Dist: numpy
+Requires-Dist: epicsdbbuilder >=1.4
+Provides-Extra: dev
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest-flake8 ; extra == 'dev'
+Requires-Dist: flake8 <5.0.0 ; extra == 'dev'
+Requires-Dist: sphinx ==4.3.2 ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme-github-versions ; extra == 'dev'
+Requires-Dist: pytest-asyncio ; extra == 'dev'
+Requires-Dist: aioca >=1.6 ; extra == 'dev'
+Requires-Dist: p4p ; extra == 'dev'
+Requires-Dist: cothread ; (sys_platform != "win32") and extra == 'dev'
+Provides-Extra: useful
+Requires-Dist: cothread ; extra == 'useful'
+Requires-Dist: scipy ; extra == 'useful'
+Requires-Dist: aioca >=1.6 ; extra == 'useful'
+
+pythonSoftIOC
+=============
+
+|code_ci| |docs_ci| |coverage| |pypi_version| |license|
+
+
+This module allows an EPICS IOC with Python Device Support to be run from within
+the Python interpreter. Records can be programmatically created and arbitrary
+Python code run to update them and respond to caputs. It supports cothread and
+asyncio for concurrency. PVs are served over Channel Access and PVAccess.
+
+============== ==============================================================
+PyPI           ``pip install softioc``
+Source code    https://github.com/dls-controls/pythonSoftIOC
+Documentation  https://dls-controls.github.io/pythonSoftIOC
+Changelog      https://github.com/dls-controls/pythonSoftIOC/blob/master/CHANGELOG.rst
+============== ==============================================================
+
+A simple example of the use of this library:
+
+.. code:: python
+
+    # Import the basic framework components.
+    from softioc import softioc, builder
+    import cothread
+
+    # Set the record prefix
+    builder.SetDeviceName("MY-DEVICE-PREFIX")
+
+    # Create some records
+    ai = builder.aIn('AI', initial_value=5)
+    ao = builder.aOut('AO', initial_value=12.45, on_update=lambda v: ai.set(v))
+
+    # Boilerplate get the IOC started
+    builder.LoadDatabase()
+    softioc.iocInit()
+
+    # Start processes required to be run after iocInit
+    def update():
+        while True:
+            ai.set(ai.get() + 1)
+            cothread.Sleep(1)
+
+
+    cothread.Spawn(update)
+
+    # Finally leave the IOC running with an interactive shell.
+    softioc.interactive_ioc(globals())
+
+.. |code_ci| image:: https://github.com/dls-controls/pythonSoftIOC/workflows/Code%20CI/badge.svg?branch=master
+    :target: https://github.com/dls-controls/pythonSoftIOC/actions?query=workflow%3A%22Code+CI%22
+    :alt: Code CI
+
+.. |docs_ci| image:: https://github.com/dls-controls/pythonSoftIOC/workflows/Docs%20CI/badge.svg?branch=master
+    :target: https://github.com/dls-controls/pythonSoftIOC/actions?query=workflow%3A%22Docs+CI%22
+    :alt: Docs CI
+
+.. |coverage| image:: https://codecov.io/gh/dls-controls/pythonSoftIOC/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/dls-controls/pythonSoftIOC
+    :alt: Test Coverage
+
+.. |pypi_version| image:: https://img.shields.io/pypi/v/softioc.svg
+    :target: https://pypi.org/project/softioc
+    :alt: Latest PyPI version
+
+.. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+    :target: https://opensource.org/licenses/Apache-2.0
+    :alt: Apache License
+
+..
+    Anything below this line is used when viewing README.rst and will be replaced
+    when included in index.rst
+
+See https://dls-controls.github.io/pythonSoftIOC for more detailed documentation.

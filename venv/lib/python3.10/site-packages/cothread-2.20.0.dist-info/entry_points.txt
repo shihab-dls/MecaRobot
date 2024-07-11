@@ -1,0 +1,2 @@
+[console_scripts]
+pvtree.py = cothread.tools.pvtree:main
