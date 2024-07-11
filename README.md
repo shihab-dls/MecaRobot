@@ -7,3 +7,11 @@ The IOC can be run by executing:
 ```bash
 > ./boot.sh
 ```
+
+Three things are currently tracked:
+
+- A PV update at every joint set during motion
+
+- Target joint set at every desired joint set is printed to terminal
+
+- String of the commands buffered into meca500, where Buffer Step is performed, is printed to terminal
