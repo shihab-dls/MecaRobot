@@ -5,6 +5,7 @@ from softioc.builder import records
 import cothread
 import socket
 import re
+import time
  
 # Record Prefix
 builder.SetDeviceName("mecaRobot")
@@ -46,7 +47,7 @@ crossover = builder.aOut("BufferCross", initial_value=1)
 bufferGroup = builder.aOut("BufferGroup", initial_value=1)
 buffer = builder.aOut("Buffer")
 bufferAll = builder.aOut("BufferAll")
-getjoints = builder.aOut("GetJoints", initial_value=0)
+getjoints = builder.aOut("GetJoints", initial_value=1)
 
 # Boilerplate to get the IOC started
 builder.LoadDatabase()
@@ -54,7 +55,7 @@ softioc.iocInit()
  
 class meca500:
  
-    def __init__(self) -> None:
+    def __init__(self):
         self.commands = ""
         self.buffer = [0,0]
         self.crossover = 0
@@ -67,6 +68,7 @@ class meca500:
         self.vel = vel.get()
         self.acc = acc.get()
         self.blend = blend.get()
+        self.current = ""
  
     def isConnect(self,*args):
         if connectTrig.get():
@@ -196,11 +198,11 @@ class meca500:
         bufferEnd = re.search(f"SetCheckpoint\({self.buffer[1]}\)",cmd)
 
         # Handle first and last window edge cases
-        bufferStart = 0 if not bufferStart else bufferStart.span()[1]
-        bufferEnd = len(self.commands[:-2]) if not bufferEnd else bufferEnd.span()[1]
+        bufferStart = 0 if not bufferStart else bufferStart.span()[1] + 1
+        bufferEnd = len(self.commands[:-1]) if not bufferEnd else bufferEnd.span()[1]
 
         # Restart pointers if all commands buffered
-        if bufferEnd != len(self.commands[:-2]):
+        if bufferEnd != len(self.commands[:-1]):
             self.crossover = self.buffer[1] - crossover.get()
             self.buffer[0] = self.buffer[1]
             bufferGroup.set(bufferGroup.get()+1)
@@ -211,6 +213,7 @@ class meca500:
 
         # Produce command
         cmd = self.commands[bufferStart:bufferEnd]
+        print(cmd.strip(" "))
         self.Send(cmd)
         terminal.set(">Moving Through Steps<")
 
@@ -236,8 +239,6 @@ class meca500:
 
     def SetError(self,param,err): terminal.set(f">Cannot Set {param}: {err}<")
     
-    def GetJoints(self): self.Send("GetRtJointPos")
-
     def Abort(self,*args): 
         self.Send("ClearMotion")  # Erase all commands from meca buffer
         # Resets buffer pointers for BufferStep() method
@@ -261,8 +262,7 @@ def Listener():  # Handles checkpoint meca responses
                 checkPoint.set(int(matchCheck.group(1)))
                 if int(matchCheck.group(1)) == rb.crossover:
                     rb.BufferStep()  ## If point == end of buffer step, send next block in
-                if getjoints.get():
-                    rb.GetJoints()  ## Checkpoints trigger joint pos request if PV truthy
+                print(rb.current)
             else:  # Any other response, print to terminal
                 terminal.set(response)
                 print(response)
@@ -275,6 +275,7 @@ def Status():  # Handles status meca responses
         try:
             response = rb.sockMon.recv(1024).decode('ascii')
             matchStatus = re.search(r'\[2007\]\[(\d+(?:,\d+)*)\]', response)  # Status RBVs?
+            matchJoints = re.search(r'\[2026\]\[(.*?)\]', response)  # Joint RBVs?
             if matchStatus:  # If truthy, update class attributes
                 status = matchStatus.group(1).split(",")
                 rb.activation_status = int(status[0])
@@ -286,6 +287,8 @@ def Status():  # Handles status meca responses
                 homeStatus.set(rb.homing_status)
                 errorStatus.set(rb.error_status)
                 pause.set(rb.pause_status)
+            elif matchJoints:
+                rb.current = matchJoints.group(1)
         except:
             pass
         cothread.Sleep(0.0001)  # Short sleep to prevent ring buffer error
