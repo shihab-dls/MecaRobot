@@ -252,6 +252,8 @@ class meca500:
 rb = meca500()  # Instantiate object of meca
 rb.Connect()
 rb.ConnectStatus()
+rb.Send("SetMonitoringInterval(0.001)")  # Sets monitoring port frequency
+rb.Send("SetRealTimeMonitoring(2210)")  # Sends constant flux of real joint positions and time (encoder-based)
 
 def Listener():  # Handles checkpoint meca responses
     while True:
@@ -262,7 +264,7 @@ def Listener():  # Handles checkpoint meca responses
                 checkPoint.set(int(matchCheck.group(1)))
                 if int(matchCheck.group(1)) == rb.crossover:
                     rb.BufferStep()  ## If point == end of buffer step, send next block in
-                print(rb.current)
+                print(f'{rb.current},')
             else:  # Any other response, print to terminal
                 terminal.set(response)
                 print(response)
@@ -275,7 +277,7 @@ def Status():  # Handles status meca responses
         try:
             response = rb.sockMon.recv(1024).decode('ascii')
             matchStatus = re.search(r'\[2007\]\[(\d+(?:,\d+)*)\]', response)  # Status RBVs?
-            matchJoints = re.search(r'\[2026\]\[(.*?)\]', response)  # Joint RBVs?
+            matchJoints = re.search(r'\[2210\]\[(.*?)\]', response)  # Joint RBVs?
             if matchStatus:  # If truthy, update class attributes
                 status = matchStatus.group(1).split(",")
                 rb.activation_status = int(status[0])
