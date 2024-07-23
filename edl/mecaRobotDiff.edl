@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 1293
-y 244
+x 655
+y 403
 w 500
 h 530
 font "arial-medium-r-18.0"
@@ -262,7 +262,7 @@ major 4
 minor 1
 release 1
 x 26
-y 304
+y 309
 w 84
 h 18
 font "arial-medium-r-16.0"
@@ -282,9 +282,9 @@ major 4
 minor 6
 release 0
 x 120
-y 305
+y 310
 w 165
-h 16
+h 20
 controlPv "$(P)$(R):Checkpoint"
 font "arial-medium-r-14.0"
 fontAlign "center"
@@ -639,7 +639,7 @@ major 4
 minor 1
 release 0
 x 30
-y 250
+y 262
 w 255
 h 20
 fgColor index 14
@@ -662,7 +662,7 @@ major 4
 minor 6
 release 0
 x 141
-y 222
+y 243
 w 143
 h 16
 controlPv "$(P)$(R):BufferGroup"
@@ -686,7 +686,7 @@ major 4
 minor 1
 release 1
 x 28
-y 220
+y 241
 w 100
 h 18
 font "arial-medium-r-16.0"
@@ -706,7 +706,7 @@ major 4
 minor 1
 release 0
 x 30
-y 276
+y 285
 w 255
 h 20
 fgColor index 14
@@ -1141,7 +1141,7 @@ major 4
 minor 1
 release 1
 x 27
-y 196
+y 220
 w 160
 h 18
 font "arial-medium-r-16.0"
@@ -1161,7 +1161,7 @@ major 4
 minor 0
 release 0
 x 192
-y 194
+y 218
 w 92
 h 21
 lineColor index 10
@@ -1177,7 +1177,7 @@ major 4
 minor 6
 release 0
 x 194
-y 196
+y 220
 w 89
 h 18
 controlPv "$(P)$(R):BufferCross"
@@ -1192,5 +1192,65 @@ nullColor index 0
 useHexPrefix
 newPos
 objType "controls"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 114
+y 194
+w 170
+h 20
+lineColor index 10
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 116
+y 195
+w 167
+h 18
+controlPv "$(P)$(R):Frequency"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 57
+bgColor index 12
+editable
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 26
+y 194
+w 81
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Frequency"
+}
+autoSize
 endObjectProperties
 

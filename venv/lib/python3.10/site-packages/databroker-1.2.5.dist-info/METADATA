@@ -1,0 +1,174 @@
+Metadata-Version: 2.1
+Name: databroker
+Version: 1.2.5
+Summary: Unification of NSLS-II data sources
+Home-page: https://github.com/NSLS-II/databroker
+Author: Brookhaven National Laboratory
+License: BSD (3-clause)
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: bluesky-live
+Requires-Dist: boltons
+Requires-Dist: cachetools
+Requires-Dist: dask[array,bag]
+Requires-Dist: doct
+Requires-Dist: event-model (>=1.16.0)
+Requires-Dist: humanize
+Requires-Dist: intake (<=0.6.4,>=0.5.5)
+Requires-Dist: jinja2
+Requires-Dist: jsonschema
+Requires-Dist: mongoquery
+Requires-Dist: msgpack
+Requires-Dist: msgpack-numpy
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: pims
+Requires-Dist: pymongo (>=3.0)
+Requires-Dist: pytz
+Requires-Dist: pyyaml
+Requires-Dist: requests
+Requires-Dist: six
+Requires-Dist: suitcase-mongo
+Requires-Dist: suitcase-msgpack
+Requires-Dist: tifffile (!=2019.7.26.2)
+Requires-Dist: toolz
+Requires-Dist: tzlocal
+Requires-Dist: xarray
+Requires-Dist: zarr
+Provides-Extra: all
+Requires-Dist: h5py ; extra == 'all'
+Requires-Dist: pymongo (>=3.0) ; extra == 'all'
+Requires-Dist: requests ; extra == 'all'
+Requires-Dist: tornado (<6) ; extra == 'all'
+Requires-Dist: ujson ; extra == 'all'
+Provides-Extra: client
+Requires-Dist: requests ; extra == 'client'
+Provides-Extra: hdf5
+Requires-Dist: h5py ; extra == 'hdf5'
+Provides-Extra: mongo
+Requires-Dist: pymongo (>=3.0) ; extra == 'mongo'
+Provides-Extra: service
+Requires-Dist: tornado (<6) ; extra == 'service'
+Requires-Dist: ujson ; extra == 'service'
+
+**********
+Databroker
+**********
+
+|build_status| |coverage| |pypi_version| |license|
+
+Databroker is a data **access** tool built around the `Bluesky Data Model`_.
+The data it manages may be from ingested files, captured results of a
+Python-based data analysis, or experimental data acquired using the Bluesky Run
+Engine.
+
+* Provide a consistent programmatic interface to data, **regardless of storage
+  details** like file format or storage medium.
+* Provide **metadata and data** in a coherent bundle, using standard widely-used
+  Python and SciPy data structures.
+* Support fast, flexible **search** over metadata.
+* Enable software tools to operate seamlessly on a
+  mixture of **live-streaming** data from the Bluesky Run Engine and **saved**
+  data from Databroker.
+
+Databroker is developed in concert with `Suitcase`_. Suitcase does data
+*writing*, and databroker does the reading. Databroker builds on `Intake`_, a
+generic data access tool (outside of the Bluesky Project).
+
+============== ==============================================================
+PyPI           ``pip install databroker``
+Conda          ``pip install -c nsls2forge databroker``
+Source code    https://github.com/bluesky/databroker
+Documentation  https://blueskyproject.io/databroker
+============== ==============================================================
+
+The bundle of metadata and data looks like this, for example.
+
+.. code:: python
+
+   >>> run
+   BlueskyRun
+     uid='4a794c63-8223-4893-895e-d16e763188a8'
+     exit_status='success'
+     2020-03-07 09:17:40.436 -- 2020-03-07 09:28:53.173
+     Streams:
+       * primary
+       * baseline
+
+Additional user metadata beyond what is shown is stored in ``run.metadata``.
+The bundle contains some number of logical tables of data ("streams"). They can
+be accessed by name and read into a standard data structure from `xarray`_.
+  
+.. code:: python
+
+    >>> run.primary.read()
+    <xarray.Dataset>
+    Dimensions:                   (time: 411)
+    Coordinates:
+      * time                      (time) float64 1.584e+09 1.584e+09 ... 1.584e+09
+    Data variables:
+        I0                        (time) float64 13.07 13.01 12.95 ... 9.862 9.845
+        It                        (time) float64 11.52 11.47 11.44 ... 4.971 4.968
+        Ir                        (time) float64 10.96 10.92 10.88 ... 4.761 4.763
+        dwti_dwell_time           (time) float64 1.0 1.0 1.0 1.0 ... 1.0 1.0 1.0 1.0
+        dwti_dwell_time_setpoint  (time) float64 1.0 1.0 1.0 1.0 ... 1.0 1.0 1.0 1.0
+        dcm_energy                (time) float64 1.697e+04 1.698e+04 ... 1.791e+04
+        dcm_energy_setpoint       (time) float64 1.697e+04 1.698e+04 ... 1.791e+04
+
+Common search queries can be done with a high-level Python interface.
+
+.. code:: python
+
+    >>> from databroker.queries import TimeRange
+    >>> catalog.search(TimeRange(since="2020"))
+
+Custom queries can be done with the `MongoDB query language`_.
+
+.. code:: python
+
+    >>> query = {
+    ...    "motors": {"$in": ["x", "y"]},  # scanning either x or y
+    ...    "temperature" {"$lt": 300},  # temperature less than 300
+    ...    "sample.element": "Ni",
+    ... }
+    >>> catalog.search(query)
+
+See the tutorials for more.
+
+.. |build_status| image:: https://github.com/bluesky/databroker/workflows/Unit%20Tests/badge.svg?branch=master
+    :target: https://github.com/bluesky/databroker/actions?query=workflow%3A%22Unit+Tests%22
+    :alt: Build Status
+
+.. |coverage| image:: https://codecov.io/gh/bluesky/databroker/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/bluesky/databroker
+    :alt: Test Coverage
+
+.. |pypi_version| image:: https://img.shields.io/pypi/v/databroker.svg
+    :target: https://pypi.org/project/databroker
+    :alt: Latest PyPI version
+
+.. |license| image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg
+    :target: https://opensource.org/licenses/BSD-3-Clause
+    :alt: BSD 3-Clause License
+
+.. _xarray: https://xarray.pydata.org/
+
+.. _MongoDB query language: https://docs.mongodb.com/manual/reference/operator/query/
+
+.. _Bluesky Data Model: https://blueskyproject.io/event-model/data-model.html
+
+.. _Suitcase: https://blueskyproject.io/suitcase/
+
+.. _Intake: https://intake.readthedocs.io/en/latest/
+
+

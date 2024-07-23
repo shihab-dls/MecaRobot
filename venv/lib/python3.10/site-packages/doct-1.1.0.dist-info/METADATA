@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: doct
+Version: 1.1.0
+Summary: A read-only dottable dictionary
+Home-page: http://github.com/NSLS-II/doct
+Author: Brookhaven National Laboratory
+License: BSD 3-Clause
+Requires-Python: >=3.6
+License-File: LICENSE
+Requires-Dist: humanize
+Requires-Dist: prettytable
+

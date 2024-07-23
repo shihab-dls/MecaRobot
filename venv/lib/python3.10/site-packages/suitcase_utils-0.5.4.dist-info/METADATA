@@ -1,0 +1,39 @@
+Metadata-Version: 2.1
+Name: suitcase-utils
+Version: 0.5.4
+Summary: UNKNOWN
+Home-page: UNKNOWN
+License: BSD (3-clause)
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.6
+Description-Content-Type: text/markdown
+Provides-Extra: complete
+Requires-Dist: bluesky ; extra == 'complete'
+Requires-Dist: caproto ; extra == 'complete'
+Requires-Dist: ophyd ; extra == 'complete'
+Requires-Dist: pytest (>=3.9) ; extra == 'complete'
+Provides-Extra: test_fixtures
+Requires-Dist: bluesky ; extra == 'test_fixtures'
+Requires-Dist: caproto ; extra == 'test_fixtures'
+Requires-Dist: ophyd ; extra == 'test_fixtures'
+Requires-Dist: pytest (>=3.9) ; extra == 'test_fixtures'
+
+# suitcase.utils
+
+This is a package of utility functions and test fixtures for suitcase packages.
+
+## Installation
+
+```
+pip install suitcase-utils
+```
+
+## Quick Start
+
+## Documentation
+
+See the [suitcase documentation](https://blueskyproject.io/suitcase/).
+
+

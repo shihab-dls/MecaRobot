@@ -6,7 +6,20 @@ import cothread
 import socket
 import re
 import time
- 
+import csv
+from ophyd import Device, EpicsSignal, EpicsSignalRO
+from ophyd import Component as Cpt
+from ophyd.utils import set_and_wait
+from bluesky.plan_stubs import mv
+from bluesky import RunEngine
+from bluesky.callbacks import LiveTable
+
+RE = RunEngine()
+
+acquire = EpicsSignal("LA84R-DI-DCAM-01:CAM:Acquire", name = "acquire")
+
+token = RE.subscribe(LiveTable(["acquire"]))
+
 # Record Prefix
 builder.SetDeviceName("mecaRobot")
  
@@ -40,6 +53,7 @@ pause = builder.aOut('Pause', initial_value=0)
 vel = builder.aOut("Vel", EGU="%", initial_value=5)
 acc = builder.aOut("Acc", EGU="%", initial_value=100)
 blend = builder.aOut("Blend", EGU="%", initial_value=100)
+frequency = builder.aOut("Frequency", EGU="Hz", initial_value=10)
 
 parse = builder.aOut('Parse', initial_value=0)
 bufferSize = builder.aOut("BufferSize", initial_value=2)
@@ -154,9 +168,35 @@ class meca500:
             blend.set(self.blend)
             self.SetError("Blending","Disconnected")
 
+    def TimeBase(self, jfile, step):
+        initial_vel = vel.get()
+        j = [[] for i in range(6)]
+        vels = [150,150,180,300,300,500]
+
+        with open(jfile, 'r') as file:
+            data = csv.reader(file)
+            for row in data:
+                for i in range(6):
+                    j[i].append(float(row[i]))
+
+        lims = []
+
+        for i in range(len(j[0])-1):
+            tmax = 0
+            for ii in range(6):
+                t = abs(j[ii][i]-j[ii][i+1])/vels[ii]
+                if t > tmax:
+                    tmax = t
+            lim = tmax/step
+            lims.append(lim)
+        lims.append(initial_vel)
+
+        return lims
+
     def Parse(self,*args):  # Parse a trajectory file into motion commands
         try:
-            file = open(f"Trajectories/{ikFile.get()}", mode='r', encoding='utf-8-sig')
+            fileName = f"Trajectories/{ikFile.get()}"
+            file = open(fileName, mode='r', encoding='utf-8-sig')
         except IsADirectoryError:
             terminal.set(">Select file<")
             return
@@ -169,18 +209,19 @@ class meca500:
         commands = ""
         point = 0
         file.close()
-        
+        lims = self.TimeBase(fileName,(1/frequency.get())/100)
+
         for line in lines:  # Tokenizes file rows
             line = [i.strip() for i in line]
             angles.append(line)
-
+        
         for points in angles:  # Produces joint commands & via point RBVs
             point += 1
             commands += "MoveJoints("
             for angle in points:
                 commands += angle
             commands += ")\n"
-            commands = commands + f"SetCheckpoint({point})\n"
+            commands = commands + f"SetCheckpoint({point})\n" + f"SetJointVel({lims[point-1]})\n"
             parseStatus.set(1)
 
         self.commands = commands  # No more composite commands appended
@@ -262,6 +303,8 @@ def Listener():  # Handles checkpoint meca responses
             matchCheck = re.search(r'\[3030\]\[(\d+)\]', response)  # Checkpoint RBVs?
             if matchCheck:  # If truthy, update PV
                 checkPoint.set(int(matchCheck.group(1)))
+                ##RE(mv(acquire,1))
+                caput("LA84R-DI-DCAM-01:CAM:Acquire",1)
                 if int(matchCheck.group(1)) == rb.crossover:
                     rb.BufferStep()  ## If point == end of buffer step, send next block in
                 print(f'{rb.current},')
@@ -301,6 +344,7 @@ cothread.Spawn(Status)  # Spin Status in a thread
 camonitor("mecaRobot:Connect",rb.isConnect)
 camonitor("mecaRobot:Parse.PROC",rb.Parse)
 camonitor("mecaRobot:IKfile",rb.AbortLocal)
+camonitor("mecaRobot:Frequency",rb.AbortLocal)
 camonitor("mecaRobot:Vel",rb.SetVel)
 camonitor("mecaRobot:Acc",rb.SetAcc)
 camonitor("mecaRobot:Blend",rb.SetBlen)
@@ -311,5 +355,6 @@ camonitor("mecaRobot:Abort.PROC",rb.Abort)
 camonitor("mecaRobot:Reset.PROC",rb.Reset)
 camonitor("mecaRobot:Home.PROC",rb.Home)
 camonitor("mecaRobot:Pause",rb.isPause)
+
 
 softioc.interactive_ioc(globals())

@@ -1,0 +1,78 @@
+Metadata-Version: 2.1
+Name: bluesky
+Version: 1.12.0
+Summary: Experiment specification & orchestration.
+Home-page: https://github.com/bluesky/bluesky
+Author: danielballan
+License: BSD (3-clause)
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: cycler
+Requires-Dist: event-model >=1.19.8
+Requires-Dist: historydict
+Requires-Dist: msgpack
+Requires-Dist: msgpack-numpy
+Requires-Dist: numpy
+Requires-Dist: super-state-machine
+Requires-Dist: toolz
+Requires-Dist: tqdm >=4.44
+Requires-Dist: typing-extensions
+Requires-Dist: zict <3.0.0
+Requires-Dist: dataclasses ; python_version < "3.7"
+Provides-Extra: all
+Requires-Dist: colorama ; extra == 'all'
+Requires-Dist: databroker ; extra == 'all'
+Requires-Dist: doct ; extra == 'all'
+Requires-Dist: historydict ; extra == 'all'
+Requires-Dist: ipython ; extra == 'all'
+Requires-Dist: jinja2 ; extra == 'all'
+Requires-Dist: lmfit ; extra == 'all'
+Requires-Dist: matplotlib ; extra == 'all'
+Requires-Dist: ophyd ; extra == 'all'
+Requires-Dist: pyzmq ; extra == 'all'
+Requires-Dist: streamz ; extra == 'all'
+Requires-Dist: tifffile ; extra == 'all'
+Provides-Extra: cmd
+Requires-Dist: colorama ; extra == 'cmd'
+Provides-Extra: common
+Requires-Dist: ophyd ; extra == 'common'
+Requires-Dist: databroker ; extra == 'common'
+Provides-Extra: ipython
+Requires-Dist: ipython ; extra == 'ipython'
+Provides-Extra: olog
+Requires-Dist: jinja2 ; extra == 'olog'
+Provides-Extra: plotting
+Requires-Dist: matplotlib ; extra == 'plotting'
+Provides-Extra: streamz
+Requires-Dist: streamz ; extra == 'streamz'
+Provides-Extra: tools
+Requires-Dist: doct ; extra == 'tools'
+Requires-Dist: lmfit ; extra == 'tools'
+Requires-Dist: tifffile ; extra == 'tools'
+Requires-Dist: historydict ; extra == 'tools'
+Provides-Extra: zmq
+Requires-Dist: pyzmq ; extra == 'zmq'
+
+# Bluesky — An Experiment Specification & Orchestration Engine
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/bluesky/bluesky/.github/workflows/testing.yml)](https://github.com/bluesky/bluesky/actions?query=workflow%3A%22Unit+Tests%22+branch%3Amaster)
+[![PyPI](https://img.shields.io/pypi/v/bluesky)](https://pypi.org/project/bluesky/)
+[![conda-forge](https://img.shields.io/conda/vn/conda-forge/bluesky?label=conda-forge%3Abluesky)](https://anaconda.org/conda-forge/bluesky)
+[![conda-forge](https://img.shields.io/conda/vn/conda-forge/bluesky-base?label=conda-forge%3Abluesky-base)](https://anaconda.org/conda-forge/bluesky-base)
+
+The Bluesky Python Package is an experiment specification and orchestration engine. 
+- Specify the logic of an experiment in a high-level, hardware-abstracted way.
+- First-class support for adaptive feedback between analysis and acquisition.
+- Data is emitted in a streaming fashion in standard Python data structures.
+- Pause/resume, robust error handling, and rich metadata capture are built in.
+
+[**Bluesky Documentation**](http://blueskyproject.io/bluesky).
+
+The Bluesky Project enables experimental science at the lab-bench or facility scale. It is a collection of Python libraries that are co-developed but independently useful and may be adopted *a la carte*.
+
+[**Bluesky Project Documentation**](http://blueskyproject.io).
+

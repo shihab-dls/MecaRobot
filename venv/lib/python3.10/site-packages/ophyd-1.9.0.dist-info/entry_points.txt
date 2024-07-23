@@ -1,0 +1,2 @@
+[databroker.handlers]
+NPY_SEQ = ophyd.sim:NumpySeqHandler

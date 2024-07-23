@@ -1,0 +1,12 @@
+[console_scripts]
+
+
+[intake.drivers]
+bluesky-event-stream = databroker.core:BlueskyEventStream
+bluesky-jsonl-catalog = databroker._drivers.jsonl:BlueskyJSONLCatalog
+bluesky-mongo-embedded-catalog = databroker._drivers.mongo_embedded:BlueskyMongoCatalog
+bluesky-mongo-normalized-catalog = databroker._drivers.mongo_normalized:BlueskyMongoCatalog
+bluesky-msgpack-catalog = databroker._drivers.msgpack:BlueskyMsgpackCatalog
+bluesky-run = databroker.core:BlueskyRun
+databroker-remote-xarray = databroker.intake_xarray_core.xarray_container:RemoteXarray
+

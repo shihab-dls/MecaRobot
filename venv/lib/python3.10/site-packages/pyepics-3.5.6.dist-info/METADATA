@@ -1,0 +1,68 @@
+Metadata-Version: 2.1
+Name: pyepics
+Version: 3.5.6
+Summary: Epics Channel Access for Python
+Author: Matthew Newville
+Author-email: newville@cars.uchicago.edu
+License: Epics Open License
+Project-URL: Source, https://github.com/pyepics/pyepics/
+Project-URL: Documentation, http://pyepics.github.io/pyepics/
+Project-URL: Tracker, https://github.com/pyepics/pyepics/issues
+Keywords: epics
+Platform: any
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: OS Independent
+Classifier: License :: Free for non-commercial use
+Classifier: License :: Freely Distributable
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Provides: epics
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: setuptools
+Requires-Dist: numpy
+Requires-Dist: pyparsing
+Requires-Dist: importlib-resources ; python_version <= "3.8"
+Provides-Extra: all
+Requires-Dist: coverage ; extra == 'all'
+Requires-Dist: pytest ; extra == 'all'
+Requires-Dist: pytest-cov ; extra == 'all'
+Requires-Dist: Sphinx ; extra == 'all'
+Requires-Dist: numpydoc ; extra == 'all'
+Requires-Dist: psutil ; (platform_system == "Linux") and extra == 'all'
+Provides-Extra: doc
+Requires-Dist: Sphinx ; extra == 'doc'
+Requires-Dist: numpydoc ; extra == 'doc'
+Provides-Extra: test
+Requires-Dist: coverage ; extra == 'test'
+Requires-Dist: pytest ; extra == 'test'
+Requires-Dist: pytest-cov ; extra == 'test'
+Requires-Dist: psutil ; (platform_system == "Linux") and extra == 'test'
+
+
+Python Interface to the Epics Channel Access protocol of the
+Epics control system.   PyEpics provides 3 layers of access to
+Channel Access (CA):
+
+1. a light wrapping of the CA C library calls, using ctypes. This
+provides a procedural CA library in which the user is expected
+to manage Channel IDs. It is mostly provided as a foundation
+upon which higher-level access is built.
+2. PV() (Process Variable) objects, which represent the basic object
+in CA, allowing one to keep a persistent connection to a remote
+Process Variable.
+3. A simple set of functions caget(), caput() and so on to mimic
+the CA command-line tools and give the simplest access to CA.
+
+In addition, the library includes convenience classes to define
+Devices -- collections of PVs that might represent an Epics Record
+or physical device (say, a camera, amplifier, or power supply), and
+to help write GUIs for CA.

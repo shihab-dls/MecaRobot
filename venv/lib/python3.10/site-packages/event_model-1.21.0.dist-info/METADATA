@@ -1,0 +1,109 @@
+Metadata-Version: 2.1
+Name: event-model
+Version: 1.21.0
+Summary: Data model used by the bluesky ecosystem
+Author-email: Brookhaven National Lab <dallan@bnl.gov>
+License: BSD 3-Clause License
+        
+        Copyright (c) 2015, Brookhaven National Laboratory
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        1. Redistributions of source code must retain the above copyright notice, this
+           list of conditions and the following disclaimer.
+        
+        2. Redistributions in binary form must reproduce the above copyright notice,
+           this list of conditions and the following disclaimer in the documentation
+           and/or other materials provided with the distribution.
+        
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived from
+           this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        
+Project-URL: GitHub, https://github.com/bluesky/event-model
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: importlib-resources
+Requires-Dist: jsonschema >=3
+Requires-Dist: numpy
+Requires-Dist: typing-extensions
+Provides-Extra: dev
+Requires-Dist: dask[array] ; extra == 'dev'
+Requires-Dist: black ; extra == 'dev'
+Requires-Dist: mypy ; extra == 'dev'
+Requires-Dist: flake8 ; extra == 'dev'
+Requires-Dist: flake8-isort ; extra == 'dev'
+Requires-Dist: Flake8-pyproject ; extra == 'dev'
+Requires-Dist: pipdeptree ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: pydata-sphinx-theme >=0.12 ; extra == 'dev'
+Requires-Dist: pytest ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: sphinx ; extra == 'dev'
+Requires-Dist: sphinx-autobuild ; extra == 'dev'
+Requires-Dist: sphinx-copybutton ; extra == 'dev'
+Requires-Dist: sphinx-design ; extra == 'dev'
+Requires-Dist: tox-direct ; extra == 'dev'
+Requires-Dist: types-mock ; extra == 'dev'
+Requires-Dist: ipython ; extra == 'dev'
+Requires-Dist: matplotlib ; extra == 'dev'
+Requires-Dist: numpydoc ; extra == 'dev'
+Requires-Dist: pydantic >=2.6 ; extra == 'dev'
+
+Event Model
+===========================
+
+|code_ci| |docs_ci| |coverage| |pypi_version| |license|
+
+============== ==============================================================
+PyPI           ``pip install event-model``
+Source code    https://github.com/bluesky/event-model
+Documentation  https://blueskyproject.io/event-model
+Releases       https://github.com/bluesky/event-model/releases
+============== ==============================================================
+
+.. |code_ci| image:: https://github.com/bluesky/event-model/actions/workflows/code.yml/badge.svg?branch=main
+    :target: https://github.com/bluesky/event-model/actions/workflows/code.yml
+    :alt: Code CI
+
+.. |docs_ci| image:: https://github.com/bluesky/event-model/actions/workflows/docs.yml/badge.svg?branch=main
+    :target: https://github.com/bluesky/event-model/actions/workflows/docs.yml
+    :alt: Docs CI
+
+.. |coverage| image:: https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/bluesky/event-model
+    :alt: Test Coverage
+
+.. |pypi_version| image:: https://img.shields.io/pypi/v/event-model.svg
+    :target: https://pypi.org/project/event-model
+    :alt: Latest PyPI version
+
+.. |license| image:: https://img.shields.io/badge/License-BSD-blue.svg
+    :target: https://opensource.org/license/bsd-3-clause/
+    :alt: BSD License
+
+..
+    Anything below this line is used when viewing README.rst and will be replaced
+    when included in index.rst
+
+See https://blueskyproject.io/event-model for more detailed documentation.

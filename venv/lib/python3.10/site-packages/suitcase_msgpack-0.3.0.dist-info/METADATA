@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: suitcase-msgpack
+Version: 0.3.0
+Summary: UNKNOWN
+Home-page: UNKNOWN
+License: BSD (3-clause)
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: event-model (>=1.8.0)
+Requires-Dist: msgpack
+Requires-Dist: msgpack-numpy
+Requires-Dist: suitcase-utils
+
+# suitcase.msgpack
+
+This is a suitcase subpackage for writing a particular file format.
+
+## Installation
+
+```
+pip install suitcase-msgpack
+```
+
+

@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: bluesky-live
+Version: 0.0.8
+Summary: Prototype building blocks for working with streaming data in bluesky
+Home-page: https://github.com/bluesky/bluesky-live
+Author: Brookhaven National Laboratory
+Author-email: dallan@bnl.gov
+License: BSD (3-clause)
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.6
+Requires-Dist: dask[array] (>=2)
+Requires-Dist: entrypoints
+Requires-Dist: event-model (>=1.16.0)
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: xarray
+
+============
+bluesky-live
+============
+
+.. image:: https://img.shields.io/travis/bluesky/bluesky-live.svg
+        :target: https://travis-ci.org/bluesky/bluesky-live
+
+.. image:: https://img.shields.io/pypi/v/bluesky-live.svg
+        :target: https://pypi.python.org/pypi/bluesky-live
+
+
+Prototype building blocks for working with streaming data in bluesky
+
+* Free software: 3-clause BSD license
+* Documentation: (COMING SOON!) https://bluesky.github.io/bluesky-live.
+
+Features
+--------
+
+* TODO
+
+
