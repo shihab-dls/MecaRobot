@@ -7,18 +7,6 @@ import socket
 import re
 import time
 import csv
-from ophyd import Device, EpicsSignal, EpicsSignalRO
-from ophyd import Component as Cpt
-from ophyd.utils import set_and_wait
-from bluesky.plan_stubs import mv
-from bluesky import RunEngine
-from bluesky.callbacks import LiveTable
-
-RE = RunEngine()
-
-acquire = EpicsSignal("LA84R-DI-DCAM-01:CAM:Acquire", name = "acquire")
-
-token = RE.subscribe(LiveTable(["acquire"]))
 
 # Record Prefix
 builder.SetDeviceName("mecaRobot")
@@ -303,8 +291,6 @@ def Listener():  # Handles checkpoint meca responses
             matchCheck = re.search(r'\[3030\]\[(\d+)\]', response)  # Checkpoint RBVs?
             if matchCheck:  # If truthy, update PV
                 checkPoint.set(int(matchCheck.group(1)))
-                ##RE(mv(acquire,1))
-                caput("LA84R-DI-DCAM-01:CAM:Acquire",1)
                 if int(matchCheck.group(1)) == rb.crossover:
                     rb.BufferStep()  ## If point == end of buffer step, send next block in
                 print(f'{rb.current},')
