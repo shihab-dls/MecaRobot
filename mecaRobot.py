@@ -7,6 +7,7 @@ import socket
 import re
 import time
 import csv
+import numpy as np
 
 # Record Prefix
 builder.SetDeviceName("mecaRobot")
@@ -71,6 +72,7 @@ class meca500:
         self.acc = acc.get()
         self.blend = blend.get()
         self.current = ""
+        self.freq = 0
  
     def isConnect(self,*args):
         if connectTrig.get():
@@ -175,10 +177,9 @@ class meca500:
                 t = abs(j[ii][i]-j[ii][i+1])/vels[ii]
                 if t > tmax:
                     tmax = t
-            lim = tmax/step
+            lim = tmax/(step-0.00002)
             lims.append(lim)
         lims.append(initial_vel)
-
         return lims
 
     def Parse(self,*args):  # Parse a trajectory file into motion commands
@@ -194,10 +195,13 @@ class meca500:
         
         lines = file.readlines()
         angles = []
-        commands = ""
+        commands = "MoveJoints(0,0,0,0,0,0)\n"
         point = 0
         file.close()
-        lims = self.TimeBase(fileName,(1/frequency.get())/100)
+        freq = frequency.get()
+        infer = freq
+        #infer = (0.00353*(freq**2))+(0.9668*freq)+0.1875
+        lims = self.TimeBase(fileName,(1/infer)/100)
 
         for line in lines:  # Tokenizes file rows
             line = [i.strip() for i in line]
@@ -278,6 +282,13 @@ class meca500:
         self.commands = ""
         parseStatus.set(0)
 
+    def Collect(self):
+        freqs = np.linspace(60,200,281)
+        frequency.set(freqs[self.freq])
+        self.freq += 1
+        self.Parse()
+        self.BufferAll()
+
 rb = meca500()  # Instantiate object of meca
 rb.Connect()
 rb.ConnectStatus()
@@ -294,6 +305,12 @@ def Listener():  # Handles checkpoint meca responses
                 if int(matchCheck.group(1)) == rb.crossover:
                     rb.BufferStep()  ## If point == end of buffer step, send next block in
                 print(f'{rb.current},')
+                with open("freqs3.csv","a") as file:
+                    #file.write(f'{rb.current}\n')
+                    pass
+                if checkPoint.get() == 399:
+                    #rb.Collect()
+                    pass
             else:  # Any other response, print to terminal
                 terminal.set(response)
                 print(response)
@@ -320,6 +337,7 @@ def Status():  # Handles status meca responses
                 pause.set(rb.pause_status)
             elif matchJoints:
                 rb.current = matchJoints.group(1)
+                #print(f'{rb.current},')
         except:
             pass
         cothread.Sleep(0.0001)  # Short sleep to prevent ring buffer error
