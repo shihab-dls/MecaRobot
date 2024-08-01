@@ -13,13 +13,14 @@ RE = RunEngine()
 class Robot(Device):
     connect = Cpt(EpicsSignal, 'Connect')
     activate = Cpt(EpicsSignal, 'Activate')
-    home = Cpt(EpicsSignal, 'Home')
+    home = Cpt(EpicsSignal, 'Home.PROC')
     buffer_step = Cpt(EpicsSignal, 'BufferSize')
     crossover = Cpt(EpicsSignal, 'BufferCross')
     frequency = Cpt(EpicsSignal, 'Frequency')
     file = Cpt(EpicsSignal, 'IKfile')
     parse = Cpt(EpicsSignal, 'Parse.PROC')
     buffer = Cpt(EpicsSignal, 'BufferAll.PROC')
+    reset = Cpt(EpicsSignal, 'Reset.PROC')
     
     checkpoint = Cpt(EpicsSignalRO, 'Checkpoint')
     var = 0
@@ -57,6 +58,7 @@ def scan(file,frequency = 10, buffer_step = 100, crossover = 1, capture = 0, cap
     my_camera.capture = capture
     yield from mv(my_camera.capture_num, capture_num)
     yield from mv(my_camera.capture_trig, 1)
+    yield from mv(my_robot.reset, 1)
     yield from mv(my_robot.file, file)
     my_camera.filename.put(file.split(".")[0])
     yield from mv(my_robot.frequency, frequency)

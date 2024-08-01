@@ -198,10 +198,7 @@ class meca500:
         commands = "MoveJoints(0,0,0,0,0,0)\n"
         point = 0
         file.close()
-        freq = frequency.get()
-        infer = freq
-        #infer = (0.00353*(freq**2))+(0.9668*freq)+0.1875
-        lims = self.TimeBase(fileName,(1/infer)/100)
+        lims = self.TimeBase(fileName,(1/frequency.get())/100)
 
         for line in lines:  # Tokenizes file rows
             line = [i.strip() for i in line]
@@ -216,7 +213,7 @@ class meca500:
             commands = commands + f"SetCheckpoint({point})\n" + f"SetJointVel({lims[point-1]})\n"
             parseStatus.set(1)
 
-        self.commands = commands  # No more composite commands appended
+        self.commands = commands + "MoveJoints(0,0,0,0,0,0)"  # No more composite commands appended
 
     def BufferStep(self,*args):  # Send commands in chunks, start to finish, with a step size
         if not self.commands:
@@ -258,12 +255,18 @@ class meca500:
         self.crossover = 0  # Set cross over to erroneous checkpoint, such that Bufferstep() not triggered
         terminal.set(">Moving Through All<")
      
-    def Activate(self): self.Send("ActivateRobot")  # Activate meca
+    def Activate(self): 
+        self.sockMon.setblocking(True)  # Blocking set true to allow for subsequent commands to queue (such as hitting activate then immedietly home)
+        self.Send("ActivateRobot")  # Activate meca
+        self.sockMon.setblocking(False)  # Blocking set false
+    
+    def Deactivate(self): 
+        self.Send("ClearMotion")  # Abort any residual motion commands
+        cothread.Sleep(1)  # Delay to ensure clear command is executed first
+        self.Send("DeactivateRobot")  # Deactivate meca
  
     def Home(self,*args): self.Send("Home")  # Calibrate meca; must be done upon activation
- 
-    def Deactivate(self): self.Send("DeactivateRobot")  # Deactivate meca
- 
+
     def Reset(self,*args): self.Send("ResetError")  # If in error, reset state
     
     def Resume(self,*args): self.Send("ResumeMotion")  # Resume motion
@@ -282,13 +285,6 @@ class meca500:
         self.commands = ""
         parseStatus.set(0)
 
-    def Collect(self):
-        freqs = np.linspace(60,200,281)
-        frequency.set(freqs[self.freq])
-        self.freq += 1
-        self.Parse()
-        self.BufferAll()
-
 rb = meca500()  # Instantiate object of meca
 rb.Connect()
 rb.ConnectStatus()
@@ -305,12 +301,6 @@ def Listener():  # Handles checkpoint meca responses
                 if int(matchCheck.group(1)) == rb.crossover:
                     rb.BufferStep()  ## If point == end of buffer step, send next block in
                 print(f'{rb.current},')
-                with open("freqs3.csv","a") as file:
-                    #file.write(f'{rb.current}\n')
-                    pass
-                if checkPoint.get() == 399:
-                    #rb.Collect()
-                    pass
             else:  # Any other response, print to terminal
                 terminal.set(response)
                 print(response)
