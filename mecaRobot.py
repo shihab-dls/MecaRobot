@@ -8,6 +8,7 @@ import re
 import time
 import csv
 import numpy as np
+import math
 
 # Record Prefix
 builder.SetDeviceName("mecaRobot")
@@ -29,6 +30,8 @@ errorStatus = builder.aOut("Error", initial_value=0)
 ## Read Back Values
 checkPoint = builder.aIn('Checkpoint', initial_value=0)
 terminal = builder.stringOut("Terminal")
+missed = builder.stringOut("Missed")
+freqlim = builder.stringOut("FreqLimits")
 
 ## Control
 connectTrig = builder.aOut("Connect", initial_value=0)
@@ -39,15 +42,13 @@ abort = builder.aOut('Abort', initial_value=0)
 reset = builder.aOut('Reset', initial_value=0)
 pause = builder.aOut('Pause', initial_value=0)
 
-vel = builder.aOut("Vel", EGU="%", initial_value=5)
-acc = builder.aOut("Acc", EGU="%", initial_value=100)
-blend = builder.aOut("Blend", EGU="%", initial_value=100)
-frequency = builder.aOut("Frequency", EGU="Hz", initial_value=10)
+vel = builder.aOut("Vel", EGU="%", initial_value=10, DRVL=0.001, DRVH=100)
+acc = builder.aOut("Acc", EGU="%", initial_value=100, DRVL=0.001, DRVH=100)
+blend = builder.aOut("Blend", EGU="%", initial_value=100, DRVL=0, DRVH=100)
+frequency = builder.aOut("Frequency", EGU="Hz", initial_value=100, DRVL=0, DRVH=499)
 
 parse = builder.aOut('Parse', initial_value=0)
-bufferSize = builder.aOut("BufferSize", initial_value=2)
-crossover = builder.aOut("BufferCross", initial_value=1)
-bufferGroup = builder.aOut("BufferGroup", initial_value=1)
+bufferSize = builder.aOut("BufferSize", initial_value=100, DRVL=2)
 buffer = builder.aOut("Buffer")
 bufferAll = builder.aOut("BufferAll")
 getjoints = builder.aOut("GetJoints", initial_value=1)
@@ -59,9 +60,8 @@ softioc.iocInit()
 class meca500:
  
     def __init__(self):
-        self.commands = ""
-        self.buffer = [0,0]
-        self.crossover = 0
+        self.commands = []
+        self.buffer = 0
         self.sock = None
         self.sockMon = None
         self.activation_status = 0
@@ -73,6 +73,9 @@ class meca500:
         self.blend = blend.get()
         self.current = ""
         self.freq = 0
+        self.history = []
+        self.missed = []
+        self.group = -1
  
     def isConnect(self,*args):
         if connectTrig.get():
@@ -159,7 +162,6 @@ class meca500:
             self.SetError("Blending","Disconnected")
 
     def TimeBase(self, jfile, step):
-        initial_vel = vel.get()
         j = [[] for i in range(6)]
         vels = [150,150,180,300,300,500]
 
@@ -170,6 +172,8 @@ class meca500:
                     j[i].append(float(row[i]))
 
         lims = []
+        lower = [0,0]
+        upper = [0,0]
 
         for i in range(len(j[0])-1):
             tmax = 0
@@ -179,7 +183,22 @@ class meca500:
                     tmax = t
             lim = tmax/(step-0.00002)
             lims.append(lim)
-        lims.append(initial_vel)
+            if lim < 0.001:
+                if 0.001-lim > lower[0]:
+                    lower[0] = 0.001-lim
+                    lower[1] = 1/(((tmax / (lower[0]+lim))+0.00002)*100)
+            elif lim > 100:
+                if lim - 100 > upper[0]:
+                    upper[0] = lim - 100
+                    upper[1] = 1/(((tmax / (lim-upper[0]))+0.00002)*100)
+
+        if lower[0]:
+            freqlim.set(f'Lower Limit Exceeded: {round(lower[1],2)}Hz')
+            frequency.set(lower[1]+1)
+        elif upper[0]:
+            freqlim.set(f'Upper Limit Exceeded: {round(upper[1],2)}Hz')
+            frequency.set(upper[1]-1)
+
         return lims
 
     def Parse(self,*args):  # Parse a trajectory file into motion commands
@@ -193,12 +212,18 @@ class meca500:
             terminal.set(">File not found<")
             return
         
+        freqlim.set("")
         lines = file.readlines()
         angles = []
-        commands = "MoveJoints(0,0,0,0,0,0)\n"
-        point = 0
+        commands = []
+        self.commands.append("MoveJoints(0,0,0,0,0,0)")
+        self.buffer = 0
+        self.missed = []
+        self.history = []
+        point = -1
         file.close()
         lims = self.TimeBase(fileName,(1/frequency.get())/100)
+
 
         for line in lines:  # Tokenizes file rows
             line = [i.strip() for i in line]
@@ -206,53 +231,49 @@ class meca500:
         
         for points in angles:  # Produces joint commands & via point RBVs
             point += 1
-            commands += "MoveJoints("
+            command = ""
+            command += "MoveJoints("
             for angle in points:
-                commands += angle
-            commands += ")\n"
-            commands = commands + f"SetCheckpoint({point})\n" + f"SetJointVel({lims[point-1]})\n"
+                command += angle
+            command += ")\n"
+            command = command + f"SetJointVel({lims[point-1]})\n"+ f"SetCheckpoint({(point%7999)+1})"
+            self.commands.append(command)
             parseStatus.set(1)
 
-        self.commands = commands + "MoveJoints(0,0,0,0,0,0)"  # No more composite commands appended
+        self.commands.append(f'SetJointVel({vel.get()})\nMoveJoints(0,0,0,0,0,0)')  # No more composite commands appended
 
     def BufferStep(self,*args):  # Send commands in chunks, start to finish, with a step size
         if not self.commands:
             terminal.set(">Parse The File<")
             return
-        size = int(bufferSize.get())
-        cmd = self.commands
-        self.buffer[1] += size  # Move end pointer for correct window size
-
-        # Search for checkpoints at start and end pointers
-        bufferStart = re.search(f"SetCheckpoint\({self.buffer[0]}\)",cmd)
-        bufferEnd = re.search(f"SetCheckpoint\({self.buffer[1]}\)",cmd)
-
-        # Handle first and last window edge cases
-        bufferStart = 0 if not bufferStart else bufferStart.span()[1] + 1
-        bufferEnd = len(self.commands[:-1]) if not bufferEnd else bufferEnd.span()[1]
-
-        # Restart pointers if all commands buffered
-        if bufferEnd != len(self.commands[:-1]):
-            self.crossover = self.buffer[1] - crossover.get()
-            self.buffer[0] = self.buffer[1]
-            bufferGroup.set(bufferGroup.get()+1)
+        if self.buffer == 0:
+            size = int(bufferSize.get())
+            cmd = ""
+            self.group = -1
+            self.history = []
+            for i in range(min(size,len(self.commands))):
+                cmd += f'{self.commands[i]}\n'
+            self.buffer = i+1
+            self.Send(cmd)
         else:
-            self.crossover = 0
-            self.buffer = [0,0]
-            bufferGroup.set(1)
+            if self.buffer < len(self.commands):
+                self.Send(f'{self.commands[self.buffer]}\n')
+                self.buffer += 1
+            else:
+                self.buffer = 0
 
-        # Produce command
-        cmd = self.commands[bufferStart:bufferEnd]
-        print(cmd.strip(" "))
-        self.Send(cmd)
         terminal.set(">Moving Through Steps<")
 
     def BufferAll(self,*args): 
         if not self.commands:
             terminal.set(">Parse The File<")
             return
-        self.Send(self.commands)  # Send entire list of parsed commands
-        self.crossover = 0  # Set cross over to erroneous checkpoint, such that Bufferstep() not triggered
+        self.history = []
+        self.group = -1
+        cmd = ""
+        for command in self.commands:
+            cmd += f'{command}\n'
+        self.Send(cmd)  # Send entire list of parsed commands
         terminal.set(">Moving Through All<")
      
     def Activate(self): 
@@ -278,12 +299,23 @@ class meca500:
     def Abort(self,*args): 
         self.Send("ClearMotion")  # Erase all commands from meca buffer
         # Resets buffer pointers for BufferStep() method
-        self.buffer = [0,0]
-        bufferGroup.set(1);pause.set(1)
+        self.buffer = 0
+        self.history = []
+        self.SetVel()
+        pause.set(1)
 
     def AbortLocal(self,*args): # Erase all commands in class buffer 
-        self.commands = ""
+        self.commands = []
         parseStatus.set(0)
+    
+    def MissedPoints(self,*args):
+        self.missed = []
+        for i in range(len(self.history)):
+            if ((i%7999)+1) != self.history[i]:
+                last = self.history[i-1]+1 if i else 0
+                for j in range(last,self.history[i]):
+                    self.missed.append(j)
+        missed.set(f'CheckPoints Lost = {self.missed}')
 
 rb = meca500()  # Instantiate object of meca
 rb.Connect()
@@ -296,11 +328,18 @@ def Listener():  # Handles checkpoint meca responses
         try:
             response = rb.sock.recv(1024).decode('ascii')
             matchCheck = re.search(r'\[3030\]\[(\d+)\]', response)  # Checkpoint RBVs?
+            matchEnd = re.search(r'\[3012\]\[(.*)\]', response)  # End of Trajectory?
             if matchCheck:  # If truthy, update PV
-                checkPoint.set(int(matchCheck.group(1)))
-                if int(matchCheck.group(1)) == rb.crossover:
-                    rb.BufferStep()  ## If point == end of buffer step, send next block in
                 print(f'{rb.current},')
+                if int(matchCheck.group(1)) == 1:
+                    rb.group += 1
+                checkPoint.set(int(matchCheck.group(1))+(rb.group*8000))
+                rb.history.append(int(matchCheck.group(1)))
+                if rb.buffer:
+                    rb.BufferStep()  ## If point == end of buffer step, send next block in
+            elif matchEnd:
+                rb.MissedPoints()
+                print(response)
             else:  # Any other response, print to terminal
                 terminal.set(response)
                 print(response)
