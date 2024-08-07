@@ -45,13 +45,12 @@ pause = builder.aOut('Pause', initial_value=0)
 vel = builder.aOut("Vel", EGU="%", initial_value=10, DRVL=0.001, DRVH=100)
 acc = builder.aOut("Acc", EGU="%", initial_value=100, DRVL=0.001, DRVH=100)
 blend = builder.aOut("Blend", EGU="%", initial_value=100, DRVL=0, DRVH=100)
-frequency = builder.aOut("Frequency", EGU="Hz", initial_value=100, DRVL=0, DRVH=499)
+frequency = builder.aOut("Frequency", EGU="Hz", initial_value=0.01, DRVL=0.0021)
 
 parse = builder.aOut('Parse', initial_value=0)
 bufferSize = builder.aOut("BufferSize", initial_value=100, DRVL=2)
 buffer = builder.aOut("Buffer")
 bufferAll = builder.aOut("BufferAll")
-getjoints = builder.aOut("GetJoints", initial_value=1)
 
 # Boilerplate to get the IOC started
 builder.LoadDatabase()
@@ -181,24 +180,32 @@ class meca500:
                 t = abs(j[ii][i]-j[ii][i+1])/vels[ii]
                 if t > tmax:
                     tmax = t
-            lim = tmax/(step-0.00002)
+            lim = round(tmax/(step-0.00002),3)
             lims.append(lim)
             if lim < 0.001:
                 if 0.001-lim > lower[0]:
                     lower[0] = 0.001-lim
-                    lower[1] = 1/(((tmax / (lower[0]+lim))+0.00002)*100)
+                    lower[1] = (((tmax / 0.001)+0.00002)*100)
             elif lim > 100:
                 if lim - 100 > upper[0]:
                     upper[0] = lim - 100
-                    upper[1] = 1/(((tmax / (lim-upper[0]))+0.00002)*100)
+                    upper[1] = (((tmax / 100)+0.00002)*100)
+        
+        print(lims)
 
         if lower[0]:
-            freqlim.set(f'Lower Limit Exceeded: {round(lower[1],2)}Hz')
-            frequency.set(lower[1]+1)
+            if round(lower[1],3) == round(step*100,3):
+                lims = self.TimeBase(jfile,(lower[1]-0.00001)/100)
+            else:
+                freqlim.set(f'Largest Period: {round(lower[1],3)}s')
+                frequency.set(round(lower[1],3))
         elif upper[0]:
-            freqlim.set(f'Upper Limit Exceeded: {round(upper[1],2)}Hz')
-            frequency.set(upper[1]-1)
-
+            if round(upper[1],3) == round(step*100,3):
+                lims = self.TimeBase(jfile,(upper[1]+0.00001)/100)
+            else:
+                freqlim.set(f'Smallest Period: {round(upper[1],3)}s')
+                frequency.set(round(upper[1],3))
+        
         return lims
 
     def Parse(self,*args):  # Parse a trajectory file into motion commands
@@ -222,7 +229,7 @@ class meca500:
         self.history = []
         point = -1
         file.close()
-        lims = self.TimeBase(fileName,(1/frequency.get())/100)
+        lims = self.TimeBase(fileName,(frequency.get())/100)
 
 
         for line in lines:  # Tokenizes file rows
@@ -241,7 +248,7 @@ class meca500:
             parseStatus.set(1)
 
         self.commands.append(f'SetJointVel({vel.get()})\nMoveJoints(0,0,0,0,0,0)')  # No more composite commands appended
-
+    
     def BufferStep(self,*args):  # Send commands in chunks, start to finish, with a step size
         if not self.commands:
             terminal.set(">Parse The File<")
@@ -388,6 +395,5 @@ camonitor("mecaRobot:Abort.PROC",rb.Abort)
 camonitor("mecaRobot:Reset.PROC",rb.Reset)
 camonitor("mecaRobot:Home.PROC",rb.Home)
 camonitor("mecaRobot:Pause",rb.isPause)
-
 
 softioc.interactive_ioc(globals())
