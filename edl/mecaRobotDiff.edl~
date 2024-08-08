@@ -4,7 +4,7 @@ major 4
 minor 0
 release 1
 x 655
-y 366
+y 403
 w 500
 h 530
 font "arial-medium-r-18.0"
@@ -264,7 +264,7 @@ release 1
 x 26
 y 309
 w 84
-h 23
+h 18
 font "arial-medium-r-16.0"
 fgColor index 14
 bgColor index 0
@@ -662,7 +662,7 @@ major 4
 minor 6
 release 0
 x 141
-y 242
+y 243
 w 143
 h 16
 controlPv "$(P)$(R):BufferGroup"
@@ -686,7 +686,7 @@ major 4
 minor 1
 release 1
 x 28
-y 240
+y 241
 w 100
 h 18
 font "arial-medium-r-16.0"

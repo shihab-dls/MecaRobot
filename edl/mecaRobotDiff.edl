@@ -3,8 +3,8 @@ beginScreenProperties
 major 4
 minor 0
 release 1
-x 655
-y 403
+x 997
+y 591
 w 500
 h 530
 font "arial-medium-r-18.0"
@@ -35,21 +35,6 @@ lineColor index 14
 fill
 fillColor index 5
 lineWidth 0
-endObjectProperties
-
-# (Rectangle)
-object activeRectangleClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 20
-y 132
-w 280
-h 206
-lineColor index 14
-fill
-fillColor index 4
 endObjectProperties
 
 # (Rectangle)
@@ -170,141 +155,6 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 314
-y 132
-w 165
-h 206
-lineColor index 14
-fill
-fillColor index 4
-endObjectProperties
-
-# (Byte)
-object ByteClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 418
-y 177
-w 37
-h 29
-controlPv "$(P)$(R):ActivateStatus"
-lineColor index 14
-onColor index 16
-offColor index 19
-lineWidth 2
-numBits 1
-endObjectProperties
-
-# (Byte)
-object ByteClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 418
-y 213
-w 37
-h 29
-controlPv "$(P)$(R):HomeStatus"
-lineColor index 14
-onColor index 16
-offColor index 19
-lineWidth 2
-numBits 1
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 328
-y 182
-w 70
-h 18
-font "arial-medium-r-16.0"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "Activated"
-}
-autoSize
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 340
-y 219
-w 56
-h 18
-font "arial-medium-r-16.0"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "Homed"
-}
-autoSize
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 26
-y 309
-w 84
-h 18
-font "arial-medium-r-16.0"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "Checkpoint"
-}
-autoSize
-endObjectProperties
-
-# (Text Monitor)
-object activeXTextDspClass:noedit
-beginObjectProperties
-major 4
-minor 6
-release 0
-x 120
-y 310
-w 165
-h 20
-controlPv "$(P)$(R):Checkpoint"
-font "arial-medium-r-14.0"
-fontAlign "center"
-fgColor index 2
-bgColor index 12
-autoHeight
-limitsFromDb
-nullColor index 0
-fastUpdate
-useHexPrefix
-newPos
-objType "monitors"
-endObjectProperties
-
-# (Rectangle)
-object activeRectangleClass
-beginObjectProperties
-major 4
-minor 0
-release 0
 x 207
 y 68
 w 254
@@ -354,65 +204,6 @@ fill
 fillColor index 7
 endObjectProperties
 
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 82
-y 137
-w 102
-h 42
-font "arial-medium-r-18.0"
-fontAlign "center"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "           Track"
-  "   "
-}
-autoSize
-endObjectProperties
-
-# (Rectangle)
-object activeRectangleClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 314
-y 132
-w 165
-h 28
-lineColor index 14
-fill
-fillColor index 7
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 314
-y 136
-w 107
-h 42
-font "arial-medium-r-18.0"
-fontAlign "center"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "           Status"
-  "   "
-}
-autoSize
-endObjectProperties
-
 # (Rectangle)
 object activeRectangleClass
 beginObjectProperties
@@ -426,51 +217,6 @@ h 120
 lineColor index 14
 fill
 fillColor index 4
-endObjectProperties
-
-# (Byte)
-object ByteClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 340
-y 297
-w 111
-h 31
-controlPv "$(P)$(R):Connect"
-lineColor index 14
-onColor index 16
-offColor index 19
-numBits 1
-endObjectProperties
-
-# (Button)
-object activeButtonClass
-beginObjectProperties
-major 4
-minor 1
-release 0
-x 343
-y 299
-w 106
-h 27
-fgColor index 14
-onColor index 57
-offColor index 56
-inconsistentColor index 14
-topShadowColor index 56
-botShadowColor index 14
-controlPv "$(P)$(R):Connect"
-indicatorPv "$(P)$(R):Connect"
-onLabel "Disconnect"
-offLabel "Connect"
-labelType "literal"
-3d
-font "arial-medium-r-18.0"
-objType "controls"
-controlBitPos 0
-readBitPos 0
 endObjectProperties
 
 # (Static Text)
@@ -610,154 +356,6 @@ nullColor index 0
 useHexPrefix
 newPos
 objType "monitors"
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 26
-y 171
-w 83
-h 18
-font "arial-medium-r-16.0"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "Buffer Step"
-}
-autoSize
-endObjectProperties
-
-# (Message Button)
-object activeMessageButtonClass
-beginObjectProperties
-major 4
-minor 1
-release 0
-x 30
-y 262
-w 255
-h 20
-fgColor index 14
-onColor index 57
-offColor index 56
-topShadowColor index 50
-botShadowColor index 14
-controlPv "$(P)$(R):Buffer.PROC"
-pressValue "1"
-onLabel "Buffer"
-offLabel "Buffer"
-3d
-font "arial-medium-r-14.0"
-endObjectProperties
-
-# (Text Monitor)
-object activeXTextDspClass:noedit
-beginObjectProperties
-major 4
-minor 6
-release 0
-x 141
-y 243
-w 143
-h 16
-controlPv "$(P)$(R):BufferGroup"
-font "arial-medium-r-14.0"
-fontAlign "center"
-fgColor index 2
-bgColor index 12
-autoHeight
-limitsFromDb
-nullColor index 0
-fastUpdate
-useHexPrefix
-newPos
-objType "monitors"
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 28
-y 241
-w 100
-h 18
-font "arial-medium-r-16.0"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "Next Block In"
-}
-autoSize
-endObjectProperties
-
-# (Message Button)
-object activeMessageButtonClass
-beginObjectProperties
-major 4
-minor 1
-release 0
-x 30
-y 285
-w 255
-h 20
-fgColor index 14
-onColor index 57
-offColor index 56
-topShadowColor index 50
-botShadowColor index 14
-controlPv "$(P)$(R):BufferAll.PROC"
-pressValue "1"
-onLabel "Buffer All"
-offLabel "Buffer All"
-3d
-font "arial-medium-r-14.0"
-endObjectProperties
-
-# (Byte)
-object ByteClass
-beginObjectProperties
-major 4
-minor 0
-release 0
-x 418
-y 252
-w 37
-h 29
-controlPv "$(P)$(R):Error"
-lineColor index 14
-onColor index 22
-offColor index 24
-lineWidth 2
-numBits 1
-endObjectProperties
-
-# (Static Text)
-object activeXTextClass
-beginObjectProperties
-major 4
-minor 1
-release 1
-x 340
-y 258
-w 58
-h 18
-font "arial-medium-r-16.0"
-fgColor index 14
-bgColor index 0
-useDisplayBg
-value {
-  "In Error"
-}
-autoSize
 endObjectProperties
 
 # (Rectangle)
@@ -932,46 +530,6 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 114
-y 169
-w 170
-h 21
-lineColor index 10
-fill
-fillColor index 57
-lineWidth 0
-endObjectProperties
-
-# (Text Control)
-object activeXTextDspClass
-beginObjectProperties
-major 4
-minor 6
-release 0
-x 116
-y 171
-w 167
-h 18
-controlPv "$(P)$(R):BufferSize"
-font "arial-medium-r-16.0"
-fontAlign "center"
-fgColor index 57
-bgColor index 12
-editable
-autoHeight
-limitsFromDb
-nullColor index 0
-useHexPrefix
-newPos
-objType "controls"
-endObjectProperties
-
-# (Rectangle)
-object activeRectangleClass
-beginObjectProperties
-major 4
-minor 0
-release 0
 x 158
 y 384
 w 130
@@ -1134,22 +692,217 @@ controlBitPos 0
 readBitPos 0
 endObjectProperties
 
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 20
+y 159
+w 280
+h 176
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
+# (Text Monitor)
+object activeXTextDspClass:noedit
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 120
+y 310
+w 165
+h 20
+controlPv "$(P)$(R):Checkpoint"
+font "arial-medium-r-14.0"
+fontAlign "center"
+fgColor index 2
+bgColor index 12
+autoHeight
+limitsFromDb
+nullColor index 0
+fastUpdate
+useHexPrefix
+newPos
+objType "monitors"
+endObjectProperties
+
 # (Static Text)
 object activeXTextClass
 beginObjectProperties
 major 4
 minor 1
 release 1
-x 27
-y 220
-w 160
+x 26
+y 309
+w 84
 h 18
 font "arial-medium-r-16.0"
 fgColor index 14
 bgColor index 0
 useDisplayBg
 value {
-  "Crossover From End"
+  "Checkpoint"
+}
+autoSize
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 30
+y 285
+w 255
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+topShadowColor index 50
+botShadowColor index 14
+controlPv "$(P)$(R):BufferAll.PROC"
+pressValue "1"
+onLabel "Buffer All"
+offLabel "Buffer All"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 30
+y 262
+w 255
+h 20
+fgColor index 14
+onColor index 57
+offColor index 56
+topShadowColor index 50
+botShadowColor index 14
+controlPv "$(P)$(R):Buffer.PROC"
+pressValue "1"
+onLabel "Buffer"
+offLabel "Buffer"
+3d
+font "arial-medium-r-14.0"
+endObjectProperties
+
+# (Text Monitor)
+object activeXTextDspClass:noedit
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 27
+y 239
+w 256
+h 20
+controlPv "$(P)$(R):Missed"
+format "string"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 24
+bgColor index 10
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "monitors"
+endObjectProperties
+
+# (Text Monitor)
+object activeXTextDspClass:noedit
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 27
+y 218
+w 256
+h 18
+controlPv "$(P)$(R):FreqLimits"
+format "string"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 24
+bgColor index 10
+autoHeight
+limitsFromDb
+nullColor index 0
+useHexPrefix
+newPos
+objType "monitors"
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 26
+y 194
+w 76
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Period (s)"
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 26
+y 171
+w 82
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Buffer Size"
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 82
+y 137
+w 102
+h 42
+font "arial-medium-r-18.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "           Track"
+  "   "
 }
 autoSize
 endObjectProperties
@@ -1160,38 +913,14 @@ beginObjectProperties
 major 4
 minor 0
 release 0
-x 192
-y 218
-w 92
+x 114
+y 169
+w 170
 h 21
 lineColor index 10
 fill
 fillColor index 57
 lineWidth 0
-endObjectProperties
-
-# (Text Control)
-object activeXTextDspClass
-beginObjectProperties
-major 4
-minor 6
-release 0
-x 194
-y 220
-w 89
-h 18
-controlPv "$(P)$(R):BufferCross"
-font "arial-medium-r-16.0"
-fontAlign "center"
-fgColor index 57
-bgColor index 12
-editable
-autoHeight
-limitsFromDb
-nullColor index 0
-useHexPrefix
-newPos
-objType "controls"
 endObjectProperties
 
 # (Rectangle)
@@ -1217,10 +946,10 @@ major 4
 minor 6
 release 0
 x 116
-y 195
+y 171
 w 167
 h 18
-controlPv "$(P)$(R):Frequency"
+controlPv "$(P)$(R):BufferSize"
 font "arial-medium-r-16.0"
 fontAlign "center"
 fgColor index 57
@@ -1234,23 +963,238 @@ newPos
 objType "controls"
 endObjectProperties
 
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 6
+release 0
+x 116
+y 195
+w 167
+h 18
+controlPv "$(P)$(R):Frequency"
+font "arial-medium-r-16.0"
+fontAlign "center"
+fgColor index 57
+bgColor index 12
+editable
+autoHeight
+precision 3
+nullColor index 0
+useHexPrefix
+newPos
+objType "controls"
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 314
+y 160
+w 165
+h 176
+lineColor index 14
+fill
+fillColor index 4
+endObjectProperties
+
 # (Static Text)
 object activeXTextClass
 beginObjectProperties
 major 4
 minor 1
 release 1
-x 26
-y 194
-w 81
+x 328
+y 182
+w 70
 h 18
 font "arial-medium-r-16.0"
 fgColor index 14
 bgColor index 0
 useDisplayBg
 value {
-  "Frequency"
+  "Activated"
 }
 autoSize
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 418
+y 177
+w 37
+h 29
+controlPv "$(P)$(R):ActivateStatus"
+lineColor index 14
+onColor index 16
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 418
+y 213
+w 37
+h 29
+controlPv "$(P)$(R):HomeStatus"
+lineColor index 14
+onColor index 16
+offColor index 19
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 340
+y 219
+w 56
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "Homed"
+}
+autoSize
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 340
+y 258
+w 58
+h 18
+font "arial-medium-r-16.0"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "In Error"
+}
+autoSize
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 418
+y 252
+w 37
+h 29
+controlPv "$(P)$(R):Error"
+lineColor index 14
+onColor index 22
+offColor index 24
+lineWidth 2
+numBits 1
+endObjectProperties
+
+# (Byte)
+object ByteClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 340
+y 297
+w 111
+h 31
+controlPv "$(P)$(R):Connect"
+lineColor index 14
+onColor index 16
+offColor index 19
+numBits 1
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 1
+release 1
+x 314
+y 136
+w 107
+h 42
+font "arial-medium-r-18.0"
+fontAlign "center"
+fgColor index 14
+bgColor index 0
+useDisplayBg
+value {
+  "           Status"
+  "   "
+}
+autoSize
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 314
+y 132
+w 165
+h 28
+lineColor index 14
+fill
+fillColor index 7
+endObjectProperties
+
+# (Button)
+object activeButtonClass
+beginObjectProperties
+major 4
+minor 1
+release 0
+x 343
+y 299
+w 106
+h 27
+fgColor index 14
+onColor index 57
+offColor index 56
+inconsistentColor index 14
+topShadowColor index 56
+botShadowColor index 14
+controlPv "$(P)$(R):Connect"
+indicatorPv "$(P)$(R):Connect"
+onLabel "Disconnect"
+offLabel "Connect"
+labelType "literal"
+3d
+font "arial-medium-r-18.0"
+objType "controls"
+controlBitPos 0
+readBitPos 0
 endObjectProperties
 
