@@ -1,14 +1,11 @@
 # Import the basic framework components.
 from softioc import softioc, builder
-from cothread.catools import caget, caput, camonitor
+from cothread.catools import camonitor
 from softioc.builder import records
 import cothread
 import socket
-import re
-import time
 import csv
-import numpy as np
-import math
+import re
 
 # Record Prefix
 builder.SetDeviceName("mecaRobot")
@@ -101,8 +98,8 @@ class meca500:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setblocking(True)  # Sets socket to blocking mode
         self.sock.connect_ex(server_addr)
-        self.sock.setblocking(False)  # Sets socket to blocking mode
-        self.SetAcc(); self.SetVel(); self.SetBlen()
+        self.sock.setblocking(False)  # Sets socket to non-blocking mode
+        self.SetAcc(); self.SetVel(); self.SetBlen()  # Set come default parameters (as changes to which persists between meca500 sessions)
 
 
     def ConnectStatus(self):  # Connect to meca500 monitoring port
@@ -110,7 +107,7 @@ class meca500:
         self.sockMon = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sockMon.setblocking(True)  # Sets socket to blocking mode
         self.sockMon.connect_ex(server_addr)
-        self.sockMon.setblocking(False)  # Sets socket to blocking mode
+        self.sockMon.setblocking(False)  # Sets socket to non-blocking mode
 
     def Disconnect(self):  # Close Socket
         try:
@@ -119,7 +116,6 @@ class meca500:
         except OSError as e:
             terminal.set(f">Socket shutdown error")
             print(e)
-
         try:
             self.sock.close()
             self.sockMon.close()
@@ -130,13 +126,13 @@ class meca500:
     
     def Send(self, command):
         try:
-            self.sock.send(bytes(command + "\0", 'ascii'))  # Send cmd to meca
+            self.sock.send(bytes(command + "\0", 'ascii'))  # Send cmd to meca500
         except:
-            connectTrig.set(0)  # If error, represent need for Connect()
+            connectTrig.set(0)  # If error, represent need for Connect() in gui
             terminal.set(f">Cannot send through socket<")
 
 
-    def SetVel(self,*args):  # Limit joint velocity
+    def SetVel(self,*args):  # Limit joint velocity of approach
         if connectTrig.get():
             self.Send(f"SetJointVel({vel.get()})")
             self.vel = vel.get()
@@ -160,7 +156,7 @@ class meca500:
             blend.set(self.blend)
             self.SetError("Blending","Disconnected")
 
-    def TimeBase(self, jfile, step):
+    def TimeBase(self, jfile, step):  # Adjust JointVel(), between viapoints, to maintain "framerate" of trajectory
         j = [[] for i in range(6)]
         vels = [150,150,180,300,300,500]
 
@@ -182,6 +178,8 @@ class meca500:
                     tmax = t
             lim = round(tmax/(step-0.00002),3)
             lims.append(lim)
+
+            # Check for JointsVel() arg error, calculate alternative period
             if lim < 0.001:
                 if 0.001-lim > lower[0]:
                     lower[0] = 0.001-lim
@@ -191,17 +189,15 @@ class meca500:
                     upper[0] = lim - 100
                     upper[1] = (((tmax / 100)+0.00002)*100)
         
-        print(lims)
-
-        if lower[0]:
+        if lower[0]:  # Provide lower limit if arg error found
             if round(lower[1],3) == round(step*100,3):
-                lims = self.TimeBase(jfile,(lower[1]-0.00001)/100)
+                lims = self.TimeBase(jfile,(lower[1]-0.00001)/100) # Check if rounding solves error (check documentation for explanation)
             else:
                 freqlim.set(f'Largest Period: {round(lower[1],3)}s')
                 frequency.set(round(lower[1],3))
-        elif upper[0]:
+        elif upper[0]: # Provide upper limit if arg error found
             if round(upper[1],3) == round(step*100,3):
-                lims = self.TimeBase(jfile,(upper[1]+0.00001)/100)
+                lims = self.TimeBase(jfile,(upper[1]+0.00001)/100) # Check if rounding solves error (check documentation for explanation)
             else:
                 freqlim.set(f'Smallest Period: {round(upper[1],3)}s')
                 frequency.set(round(upper[1],3))
@@ -222,7 +218,6 @@ class meca500:
         freqlim.set("")
         lines = file.readlines()
         angles = []
-        commands = []
         self.commands.append("MoveJoints(0,0,0,0,0,0)")
         self.buffer = 0
         self.missed = []
@@ -249,11 +244,11 @@ class meca500:
 
         self.commands.append(f'SetJointVel({vel.get()})\nMoveJoints(0,0,0,0,0,0)')  # No more composite commands appended
     
-    def BufferStep(self,*args):  # Send commands in chunks, start to finish, with a step size
+    def BufferStep(self,*args):  # Slide command window to avoid meca500 buffer overflow
         if not self.commands:
             terminal.set(">Parse The File<")
             return
-        if self.buffer == 0:
+        if self.buffer == 0:  # If start of trajectory, send chunk to initialise meca500 buffer
             size = int(bufferSize.get())
             cmd = ""
             self.group = -1
@@ -263,10 +258,10 @@ class meca500:
             self.buffer = i+1
             self.Send(cmd)
         else:
-            if self.buffer < len(self.commands):
+            if self.buffer < len(self.commands):  # If more commands are available, send next command
                 self.Send(f'{self.commands[self.buffer]}\n')
                 self.buffer += 1
-            else:
+            else:  # If no more commands, interrupt with falsy buffer
                 self.buffer = 0
 
         terminal.set(">Moving Through Steps<")
@@ -280,7 +275,7 @@ class meca500:
         cmd = ""
         for command in self.commands:
             cmd += f'{command}\n'
-        self.Send(cmd)  # Send entire list of parsed commands
+        self.Send(cmd)  # Send entire list of parsed commands (possible meca500 buffer overflow)
         terminal.set(">Moving Through All<")
      
     def Activate(self): 
@@ -315,7 +310,7 @@ class meca500:
         self.commands = []
         parseStatus.set(0)
     
-    def MissedPoints(self,*args):
+    def MissedPoints(self,*args):  # Check history of checkpoints to determine missed viapoints
         self.missed = []
         for i in range(len(self.history)):
             if ((i%7999)+1) != self.history[i]:
@@ -343,8 +338,8 @@ def Listener():  # Handles checkpoint meca responses
                 checkPoint.set(int(matchCheck.group(1))+(rb.group*8000))
                 rb.history.append(int(matchCheck.group(1)))
                 if rb.buffer:
-                    rb.BufferStep()  ## If point == end of buffer step, send next block in
-            elif matchEnd:
+                    rb.BufferStep()  ## If buffer is truthy, add new command to meca500 buffer
+            elif matchEnd:  # Check for missed viapoints at end of motion
                 rb.MissedPoints()
                 print(response)
             else:  # Any other response, print to terminal
@@ -373,14 +368,13 @@ def Status():  # Handles status meca responses
                 pause.set(rb.pause_status)
             elif matchJoints:
                 rb.current = matchJoints.group(1)
-                #print(f'{rb.current},')
         except:
             pass
         cothread.Sleep(0.0001)  # Short sleep to prevent ring buffer error
 
 cothread.Spawn(Listener)  # Spin Listener in a thread
 cothread.Spawn(Status)  # Spin Status in a thread
- 
+# Set up subscriptions for gui
 camonitor("mecaRobot:Connect",rb.isConnect)
 camonitor("mecaRobot:Parse.PROC",rb.Parse)
 camonitor("mecaRobot:IKfile",rb.AbortLocal)
